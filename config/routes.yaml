@@ -1,3 +1,11 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+app.dashboard:
+    path: /
+    controller: App\Controller\DashboardController:index
+
+api.scene.trigger:
+    path: /api/scene/{id}
+    controller: App\Controller\Api\SceneController:trigger
+
+api.yeelight.execute:
+    path: /api/yeelight/{id}/action/{method}/{params}/{responseId<\d+>?0}
+    controller: App\Controller\Api\YeelightController:execute

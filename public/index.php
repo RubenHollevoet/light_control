@@ -8,6 +8,8 @@ require dirname(__DIR__).'/config/bootstrap.php';
 
 if ($_SERVER['APP_DEBUG']) {
     umask(0000);
+//    ini_set('xdebug.remote_autostart', 1);
+//    ini_set('xdebug.remote_connect_back', 1);
 
     Debug::enable();
 }
