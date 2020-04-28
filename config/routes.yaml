@@ -2,6 +2,18 @@ app.dashboard:
     path: /
     controller: App\Controller\DashboardController:index
 
+app.devices:
+    path: /devices
+    controller: App\Controller\DashboardController:devices
+
+app.tags:
+    path: /tags
+    controller: App\Controller\DashboardController:tags
+
+app.scenes:
+    path: /scenes
+    controller: App\Controller\DashboardController:scenes
+
 api.scene.trigger:
     path: /api/scene/{id}
     controller: App\Controller\Api\SceneController:trigger

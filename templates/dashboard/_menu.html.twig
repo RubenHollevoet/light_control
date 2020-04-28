@@ -1,0 +1,6 @@
+<div class="nav flex-column nav-pills">
+    <a class="nav-link{% if pageTitle == 'Dashboard' %} active{% endif %}" href="{{ path('app.dashboard') }}">Dashboard</a>
+    <a class="nav-link{% if pageTitle == 'Devices' %} active{% endif %}" href="{{ path('app.devices') }}">Devices</a>
+    <a class="nav-link{% if pageTitle == 'Tags' %} active{% endif %}" href="{{ path('app.tags') }}">Tags</a>
+    <a class="nav-link{% if pageTitle == 'Scenes' %} active{% endif %}" href="{{ path('app.scenes') }}">Scenes</a>
+</div>

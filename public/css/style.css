@@ -1,0 +1,8 @@
+.fa-signal, .fa-layer-group, .fa-tag {
+    color: #343a40;
+}
+
+.tag-list {
+    list-style: none;
+    padding-left: 0;
+}

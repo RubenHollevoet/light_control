@@ -1,0 +1,132 @@
+{% extends 'dashboard/index.html.twig' %}
+
+{% set pageTitle = 'Dashboard' %}
+
+{% block content %}
+<div>
+    <h2>Tags</h2>
+    <h2>Devices</h2>
+    {% for device in devices %}
+        <div class="row js-yeelight py-2" data-id="{{ device.id }}">
+            <div class="col-2 col-md-1 align-self-center">
+                {% if device.type == constant('App\\Entity\\Device::TYPE_YEELIGHT') %}
+                    <img src="{{ asset('img/icons/yeelight.png') }}" width="48" height="48" alt="icon yeelight">
+                {% elseif device.type == constant('App\\Entity\\Device::TYPE_ARDUINO') %}
+                    <img src="{{ asset('img/icons/arduino.png') }}" width="48" height="48" alt="icon yeelight">
+                {% endif %}
+            </div>
+            <div class="col-6 col-md-3 align-self-center">
+                {{ device.name }}
+            </div>
+            <div class="col-4 col-md-2 align-self-center">
+                <span><i class="fas fa-lightbulb fa-lg js-icon-lamp"></i></span>
+                <span><i class="fas fa-signal fa-lg ml-2"></i><span class="ml-1 js-icon-bright"></span></span>
+            </div>
+            <div class="col-md-6 py-2 align-self-center">
+                {% if device.type == constant('App\\Entity\\Device::TYPE_YEELIGHT') %}
+                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                        <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'id': device.id, 'method': 'set_power', 'params': 'on,sudden,0'}) }}">On</button>
+                        <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'id': device.id, 'method': 'set_power', 'params': 'off,sudden,0'}) }}">Off</button>
+                    </div>
+                    <div class="btn-group js-disable-when-off" role="group" aria-label="Button group with nested dropdown">
+                        <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'id': device.id, 'method': 'set_bright', 'params': '30,sudden,0'}) }}">30%</button>
+                        <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'id': device.id, 'method': 'set_bright', 'params': '100,sudden,0'}) }}">100%</button>
+                        <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'id': device.id, 'method': 'set_ct_abx', 'params': '2840,sudden,0'}) }}">WW</button>
+                    </div>
+                {% elseif device.type == constant('App\\Entity\\Device::TYPE_ARDUINO') %}
+                    <p>todo: Arduino actions</p>
+                {% endif %}
+            </div>
+            <div class="col-0 col-md-1"></div>
+            <div class="col-12 col-md-11 d-flex align-items-center">
+                <span class="fas fa-tag"></span>
+                {% for tag in device.tags %}
+                    <span class="ml-2 badge badge-pill badge-primary">{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <p>There are no registered devices</p>
+        <a href="{{ path('app.devices') }}" class="btn btn-success">register device</a>
+    {% endfor %}
+    </div>
+    <h2>Scenes</h2>
+    {% for scene in scenes %}
+    {% else %}
+        <p>There are no scenes configured</p>
+        <a href="{{ path('app.scenes') }}" class="btn btn-success">create scene</a>
+    {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="js/helpers.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            document.querySelectorAll('.js-device-info-action').forEach(function (el) {
+                el.addEventListener('click', function (e) {
+                    const $infoBlock = document.querySelector('.js-device-info-' + e.currentTarget.dataset.row);
+                    $infoBlock.classList.toggle('d-none');
+                    el.classList.remove('btn-outline-primary', 'btn-primary');
+                    el.classList.add($infoBlock.classList.contains('d-none') ? 'btn-outline-primary' : 'btn-primary');
+                });
+            });
+
+            document.querySelectorAll('.js-ajax').forEach(function (el) {
+                el.addEventListener('click', function (e) {
+                    axios.get(e.currentTarget.dataset.url)
+                        .then(function (response) {
+                            // handle success
+                            updateLight($(el).closest('.js-yeelight').data('id'));
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error);
+                        })
+                    ;
+                });
+            });
+        });
+
+        updateLight();
+
+        function updateLight(lightId = 0) {
+            document.querySelectorAll('.js-yeelight').forEach(function (el) {
+                if(!lightId || lightId === Number(el.dataset.id)) {
+                    axios.get('/api/yeelight/' +  el.dataset.id + '/action/get_prop/power,bright,color_mode,ct,rgb')
+                        .then(function (response) {
+                            const data = response.data.result;
+
+                            if(data[0] === 'on') {
+                                if(data[2] === '1') {
+                                    el.querySelector('.js-icon-lamp').setAttribute('style', 'color: #'+rgbToHex(Number(data[4])));
+                                }
+                                else if(data[2] === '2') {
+                                    el.querySelector('.js-icon-lamp').setAttribute('style', 'color: #'+colorTemperatureToHex(Number(data[3])));
+                                }
+
+                                el.querySelectorAll('.js-disable-when-off').forEach(function (actionBtn) {
+                                    actionBtn.disabled = true;
+                                });
+                            }
+                            else {
+                                el.querySelector('.js-icon-lamp').setAttribute('style', 'color: #000000');
+
+                            }
+
+                            el.querySelector('.js-icon-bright').textContent = data[1] + '%';
+
+                            // enable/disable action buttons when on/of
+                            el.querySelectorAll('.js-disable-when-off > .btn').forEach(function (actionBtn) {
+                                actionBtn.disabled = data[0] !== 'on';
+                            });
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error);
+                        });
+                }
+            })
+        }
+    </script>
+{% endblock %}

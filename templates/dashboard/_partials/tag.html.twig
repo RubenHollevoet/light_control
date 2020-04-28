@@ -1,0 +1,17 @@
+<tr>
+    <td>
+        <span class="fas fa-tag mr-2"></span>
+    </td>
+    <td class="mr-2">
+        <div class="mr-2">
+            {{ form_errors(tag.name) }}
+            {{ form_widget(tag.name) }}
+        </div>
+    </td>
+    <td class="">
+        <button class="btn btn-danger mr-2 js-remove-tag"><span class="fas fa-trash"></span></button>
+    </td>
+    <td>
+        <span class="fas fa-layer-group"></span> {{ tag.vars.value.devices|length }}
+    </td>
+</tr>

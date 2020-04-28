@@ -53,9 +53,15 @@ class Device
      */
     private $scenes;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", mappedBy="Devices")
+     */
+    private $tags;
+
     public function __construct()
     {
         $this->scenes = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -158,6 +164,34 @@ class Device
         if ($this->scenes->contains($scene)) {
             $this->scenes->removeElement($scene);
             $scene->removeDevice($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+            $tag->addDevife($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+            $tag->removeDevife($this);
         }
 
         return $this;

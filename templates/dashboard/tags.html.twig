@@ -1,0 +1,61 @@
+{% extends 'dashboard/index.html.twig' %}
+
+{% set pageTitle = 'Tags' %}
+
+{% block content %}
+
+    {{ form_start(form) }}
+
+    {{ form_label(form.tags) }}
+    {{ form_errors(form.tags) }}
+
+    <table>
+        <thead></thead>
+        <tbody class="js-tbody-tags"
+            data-prototype="{% apply escape %}{% include 'dashboard/_partials/tag.html.twig' with {tag: form.tags.vars.prototype } only %}{% endapply %}"
+        >
+        {% for tag in form.tags %}
+            {% include 'dashboard/_partials/tag.html.twig' with {tag: tag} only %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <button type="button"
+            class="btn btn-outline-success mt-3 js-add-widget"
+            data-list-selector=".js-tbody-tags">add tag</button>
+
+    <div class="mt-5">
+        {{ form_widget(form.save) }}
+    </div>
+
+
+    {{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        // add-collection-widget.js
+        $(document).ready(function () {
+            $('.js-add-widget').click(function (e) {
+                var list = $($(this).attr('data-list-selector'));
+                var counter = list.data('widget-counter') || list.children().length;
+
+                var newWidget = list.attr('data-prototype');
+                newWidget = newWidget.replace(/__tagid__/g, counter);
+                counter++;
+                list.data('widget-counter', counter);
+
+                $(list).append(newWidget);
+            });
+        });
+
+        //remove logic
+        $(document.body).on('click', '.js-remove-tag', function (e) {
+            e.preventDefault();
+
+            var tagCount = $(this.closest('.js-tbody-tags')).find('tr').length;
+            $(this).closest('tr').remove();
+        });
+    </script>
+{% endblock %}

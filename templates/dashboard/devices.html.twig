@@ -1,0 +1,14 @@
+{% extends 'dashboard/index.html.twig' %}
+
+{% set pageTitle = 'Devices' %}
+
+{% block content %}
+    <h2>Devices</h2>
+    <a href="{{ path('app.devices', {'action':'scan_yeelights'}) }}" type="button" class="btn btn-outline-success">Scan for Yeelights</a>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+
+    </script>
+{% endblock %}

@@ -27,6 +27,10 @@ class DeviceType extends AbstractType
             ->add('ip', TextType::class, [
                 'label' => false
             ])
+            ->add('tags', null, [
+                'label' => false,
+                'required' => false
+            ])
             ->add('scenes', null, [
                 'label' => false,
                 'required' => false

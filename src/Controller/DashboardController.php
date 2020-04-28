@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Device;
 use App\Entity\Scene;
+use App\Entity\Tag;
 use App\Form\DashboardType;
+use App\Form\TagsType;
 use App\Services\FunService;
 use App\Services\YeelightService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,35 +29,69 @@ class DashboardController extends AbstractController
 
     public function index(Request $request)
     {
-        if($request->get('action') === 'scan_yeelights') {
-            $this->yeelightService->scanForYeelights();
-            $this->redirectToRoute('app.dashboard', []);
-        }
-
         $em = $this->getDoctrine()->getManager();
 
         $devices = $em->getRepository(Device::class)->findAll();
         $scenes =  $em->getRepository(Scene::class)->findAll();
 
-        $form = $this->createForm(DashboardType::class, ['devices' => $devices]);
+        return $this->render('dashboard/dashboard.html.twig', [
+            'scenes' => $scenes,
+            'devices' => $devices
+        ]);
+    }
+
+    public function devices(Request $request) {
+        if($request->get('action') === 'scan_yeelights') {
+            $this->yeelightService->scanForYeelights();
+            $this->redirectToRoute('app.dashboard', []);
+        }
+
+        return $this->render('dashboard/devices.html.twig', [
+            'form' => '',
+            'devices' => []
+        ]);
+    }
+
+    public function tags(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $tags = $em->getRepository(Tag::class)->findAll();
+        $form = $this->createForm(TagsType::class, ['tags' => $tags]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+
             $formData = $form->getData();
-            $devices = $formData['devices'];
+            $newTags = $formData['tags'];
 
-            $em = $this->getDoctrine()->getManager();
+            //persist all new tags
+            foreach ($newTags as $tag) {
+                $em->persist($tag);
+            }
 
-            foreach ($devices as $device) {
-                $em->persist($device);
+            //update $tags
+            $tags = $em->getRepository(Tag::class)->findAll();
+
+            //remove tags that aren't pushed anymore
+            foreach ($tags as $tag) {
+                if(!in_array($tag, $newTags)) {
+                    $em->remove($tag);
+                }
             }
 
             $em->flush();
         }
 
-        return $this->render('dashboard/index.html.twig', [
+        return $this->render('dashboard/tags.html.twig', [
             'form' => $form->createView(),
-            'scenes' => $scenes,
-            'devices' => $devices
+            'tags' => []
+        ]);
+    }
+
+    public function scenes(Request $request) {
+        return $this->render('dashboard/scenes.html.twig', [
+            'form' => '',
+            'scenes' => []
         ]);
     }
 }

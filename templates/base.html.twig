@@ -2,12 +2,17 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Title{% endblock %}</title>
         <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/style.css" />
         <script src="https://kit.fontawesome.com/8cbbb68633.js" crossorigin="anonymous"></script>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+{#    {% filter escape %}#}
+{#        <h1>ddddddddd</h1>#}
+{#    {% endfilter %}#}
         <div class="container">
             {% for label, messages in app.flashes %}
                 {% for message in messages %}
@@ -16,7 +21,7 @@
                     </div>
                 {% endfor %}
             {% endfor %}
-            {% block content %}{% endblock %}
+            {% block body %}{% endblock %}
         </div>
         <script
             src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
