@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Device;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -18,20 +19,19 @@ class DeviceType extends AbstractType
             ->add('name', TextType::class, [
                 'label' => false
             ])
-            ->add('deviceId', TextType::class, [
-                'label' => false
-            ])
-            ->add('type', NumberType::class, [
-                'label' => false
-            ])
             ->add('ip', TextType::class, [
                 'label' => false
             ])
-            ->add('tags', null, [
+            ->add('type', ChoiceType::class, [
                 'label' => false,
-                'required' => false
+                'choices'  => [
+                    Device::TYPE_YEELIGHT_BULB_COLOR_2 => Device::TYPE_YEELIGHT_BULB_COLOR_2,
+                    Device::TYPE_YEELIGHT_BULB_COLOR_S1 => Device::TYPE_YEELIGHT_BULB_COLOR_S1,
+                    Device::TYPE_YEELIGHT_STRIP_COLOR => Device::TYPE_YEELIGHT_STRIP_COLOR,
+                    Device::TYPE_ARDUINO_TODO => Device::TYPE_ARDUINO_TODO,
+                ],
             ])
-            ->add('scenes', null, [
+            ->add('tags', null, [
                 'label' => false,
                 'required' => false
             ])

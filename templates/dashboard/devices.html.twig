@@ -2,13 +2,56 @@
 
 {% set pageTitle = 'Devices' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="css/bootstrap/bootstrap-select.min.css" />
+{% endblock %}
+
 {% block content %}
-    <h2>Devices</h2>
-    <a href="{{ path('app.devices', {'action':'scan_yeelights'}) }}" type="button" class="btn btn-outline-success">Scan for Yeelights</a>
+
+    {{ form_start(form) }}
+
+    {{ form_label(form.devices) }}
+    {{ form_errors(form.devices) }}
+
+    <table>
+        <thead></thead>
+        <tbody class="js-tbody-devices"
+               data-prototype="{% apply escape %}{% include 'dashboard/_partials/device.html.twig' with {device: form.devices.vars.prototype } only %}{% endapply %}">
+        {% for device in form.devices %}
+            {% include 'dashboard/_partials/device.html.twig' with {device: device} only %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div>
+        <button type="button" class="btn btn-outline-success mt-3 js-add-widget" data-list-selector=".js-tbody-devices">add device</button>
+    </div>
+
+    <div class="mt-5">
+        {{ form_widget(form.save) }}
+        <a href="{{ path('app.devices', {'action':'scan_yeelights'}) }}" type="button" class="btn btn-success">Scan for Yeelights</a>
+    </div>
+
+    {{ form_end(form) }}
+
+
 {% endblock %}
 
 {% block javascripts %}
+    <script src="js/popper/popper.min.js"></script>
+    <script src="js/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="js/bootstrap/bootstrap-select.min.js"></script>
+    <script src="js/axios/axios.min.js"></script>
     <script>
-
+        document.querySelectorAll('.js-ajax').forEach(function (el) {
+            el.addEventListener('click', function (e) {
+                console.log('GOGOGO', e.currentTarget.dataset.url);
+                axios.get(e.currentTarget.dataset.url)
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+                ;
+            });
+        });
     </script>
 {% endblock %}

@@ -54,7 +54,7 @@ class YeelightService
             {
                 $device = new Device();
                 $device->setDeviceId($yeelight->getId());
-                $device->setType(Device::TYPE_YEELIGHT);
+                $device->setBrand(Device::BRAND_YEELIGHT);
                 $device->setName('Yeelight');
                 $this->em->persist($device);
             }

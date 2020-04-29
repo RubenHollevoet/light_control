@@ -13,8 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Device
 {
-    public const TYPE_YEELIGHT = 0;
-    public const TYPE_ARDUINO = 1;
+    public const BRAND_YEELIGHT = 'Yeelight';
+    public const BRAND_ARDUINO = 'Arduino';
+
+    public const TYPE_YEELIGHT_BULB_COLOR_2 = 'Yee bulb V2 color';
+    public const TYPE_YEELIGHT_BULB_COLOR_S1 = 'Yee bulb S1 color';
+    public const TYPE_YEELIGHT_STRIP_COLOR = 'Yee Led strip';
+    public const TYPE_ARDUINO_TODO = 'Arduino TODO';
 
     /**
      * @ORM\Id()
@@ -34,7 +39,12 @@ class Device
     private $deviceId;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
+     */
+    private $brand;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
      */
     private $type;
 
@@ -54,7 +64,8 @@ class Device
     private $scenes;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", mappedBy="Devices")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag", inversedBy="Devices")
+     * @ORM\JoinTable(name="app_tag_device")
      */
     private $tags;
 
@@ -95,6 +106,22 @@ class Device
     public function setDeviceId($deviceId): void
     {
         $this->deviceId = $deviceId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBrand()
+    {
+        return $this->brand;
+    }
+
+    /**
+     * @param mixed $brand
+     */
+    public function setBrand($brand): void
+    {
+        $this->brand = $brand;
     }
 
     /**

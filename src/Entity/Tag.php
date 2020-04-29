@@ -25,8 +25,7 @@ class Tag
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Device", inversedBy="tags")
-     * @ORM\JoinTable(name="app_tag_device")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Device", mappedBy="tags")
      */
     private $Devices;
 

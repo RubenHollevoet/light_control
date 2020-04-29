@@ -6,3 +6,9 @@
     list-style: none;
     padding-left: 0;
 }
+
+.icon-label {
+    min-width: 34px;
+    color: #343a40;
+    text-align: center;
+}

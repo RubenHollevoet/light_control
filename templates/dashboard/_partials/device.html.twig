@@ -1,0 +1,67 @@
+<tr>
+    <td>
+        <div class="col-2 col-md-1 align-self-center">
+            {% if device.vars.value.brand == constant('App\\Entity\\Device::BRAND_YEELIGHT') %}
+                <img src="{{ asset('img/icons/yeelight.png') }}" width="48" height="48" alt="icon yeelight">
+            {% elseif device.vars.value.brand == constant('App\\Entity\\Device::BRAND_ARDUINO') %}
+                <img src="{{ asset('img/icons/arduino.png') }}" width="48" height="48" alt="icon yeelight">
+            {% endif %}
+        </div>
+    </td>
+
+    <td>
+        <div class="row mr-2">
+            <div class="col-12 col-md-4 my-2 d-flex align-items-center">
+                <span class="far fa-lightbulb icon-label"></span>
+                {{ form_errors(device.name) }}
+                {{ form_widget(device.name) }}
+            </div>
+            <div class="col-12 col-md-4 mb-2 d-flex align-items-center">
+                <span class="fas fa-wifi icon-label"></span>
+                {{ form_errors(device.ip) }}
+                {{ form_widget(device.ip) }}
+            </div>
+            <div class="col-12 col-md-4 mb-2 d-flex align-items-center">
+                {% if device.vars.value.deviceId %}
+                    <span class="fas fa-fingerprint icon-label"></span>
+                    <input type="text" class="form-control" value="{{ device.vars.value.deviceId }}" disabled>
+                {% endif %}
+            </div>
+            <div class="col-12 col-md-4 d-flex mb-2 align-items-center">
+                <span class="fas fa-list-ul icon-label"></span>
+                {{ form_errors(device.type) }}
+                {{ form_widget(device.type, { 'attr': { 'class': 'selectpicker'} }) }}
+            </div>
+            <div class="col-12 col-md-8 d-flex mb-2 align-items-center">
+                <span class="fas fa-tags icon-label"></span>
+
+                {{ form_errors(device.tags) }}
+                {% if device.vars.value.brand == constant('App\\Entity\\Device::BRAND_YEELIGHT') %}
+                    {{ form_widget(device.tags, {'attr': {'class': 'selectpicker', 'data-actions-box': 'true'}}) }}
+                {% elseif device.vars.value.brand == constant('App\\Entity\\Device::BRAND_ARDUINO') %}
+                    {{ form_widget(device.tags) }}
+                {% endif %}
+            </div>
+            <div class="col-12 mb-2">
+                <span class="far fa-clock icon-label"></span>
+                <span class="text-muted">last IP confirmation: {{ device.vars.value.lastScan|date }}</span>
+            </div>
+        </div>
+    </td>
+
+
+
+    <td class="">
+        {% if device.vars.value.brand == constant('App\\Entity\\Device::BRAND_YEELIGHT') %}
+            <button type="button" class="btn btn-primary mb-2 js-ajax" data-url="{{ path('api.yeelight.execute', {'target': device.vars.value.id, 'method': 'start_cf', 'params': '6,0,300-2-6000-100-300-2-6000-1'}) }}"><span class="fas fa-bolt fa-fw"></span></button>
+
+{#            <button class="btn btn-danger mr-2 js-remove-device"><span class="fas fa-trash"></span></button>#}
+        {% endif %}
+        <button class="btn btn-danger mr-2 js-remove-device"><span class="fas fa-trash fa-fw"></span></button>
+    </td>
+    <td>
+
+
+{#        <span class="fas fa-layer-group"></span> {{ device.vars.value.devices|length }}#}
+    </td>
+</tr>

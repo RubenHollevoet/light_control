@@ -14,10 +14,14 @@ app.scenes:
     path: /scenes
     controller: App\Controller\DashboardController:scenes
 
+app.api:
+    path: /api
+    controller: App\Controller\DashboardController:api
+
 api.scene.trigger:
     path: /api/scene/{id}
     controller: App\Controller\Api\SceneController:trigger
 
 api.yeelight.execute:
-    path: /api/yeelight/{id}/action/{method}/{params}/{responseId<\d+>?0}
+    path: /api/yeelight/{target}/{method}/{params?0}/{responseId<\d+>?0}
     controller: App\Controller\Api\YeelightController:execute

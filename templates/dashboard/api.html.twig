@@ -1,0 +1,230 @@
+{% extends 'dashboard/index.html.twig' %}
+
+{% set pageTitle = 'API' %}
+
+{% block content %}
+    <h2>Yeelight</h2>
+    <h4>Devices</h4>
+        <div class="mb-4">
+            {% for device in devices %}
+                <button type="button" class="btn btn-outline-primary mb-1 js-target" data-target="{{ device.id }}">{{ device.name }}</button>
+            {% endfor %}
+        </div>
+    <h4>Tags</h4>
+        <div class="mb-4">
+            {% for tag in tags %}
+                <button type="button" class="btn btn-outline-primary mb-1 js-target" data-target="t{{ tag.id }}">{{ tag.name }} <span class="badge badge-light">{{ tag.devices|length }}</span></button>
+            {% endfor %}
+        </div>
+    <h3>Method</h3>
+        <div class="mb-4">
+            {% set brightness = '1;30;100' %}
+            {% set duration = '500;1500' %}
+            {% set effect = 'sudden;smooth' %}
+            {% set rgb = '255;65280;16711680' %}
+            {% set hue = '0;100;250;359' %}
+            {% set sat = '0;30;100' %}
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="prop N|power;bright;ct;rgb;hue;sat;color_mode;flowing;delayoff;flow_params;music_on;name;bg_power;bg_flowing;bg_flow_params;bg_ct;bg_lmode;bg_bright;bg_rgb;bg_hue;bg_sat;nl_br;active_mode">get_prop</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="ct_value|1700;2900;3600;6500,effect|{{ effect }},duration|{{duration}}">set_ct_abx</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="rgb_value|{{ rgb }},effect|{{ effect }},duration|{{duration}}">set_rgb</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="hue|{{ hue }},sat|{{ sat }},effect|{{ effect }},duration|{{ duration }}">set_hsv</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="brightness|{{ brightness }},effect|{{ effect }},duration|{{ duration }}">set_bright</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="power|on;off,effect|{{ effect }},duration|{{ duration }},mode*|0;1;2;3;4;5">set_power</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="">toggle</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="">set_default</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="count|0;1;5,action|0;1;2,flow_expression|1000-2-2700-100-500-1-255-10-5000-7-0-0-500-2-5000-1">start_cf</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="">stop_cf</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="class,val1,val2,val3*">set_scene</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="type,value">cron_add</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="type">cron_get</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="type">cron_del</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="action,prop">set_adjust</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="action,host,port">set_music</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="name">set_name</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="rgb_value,effect|{{ effect }},duration|{{ duration }}">bg_set_rgb</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="hue,sat,effect|{{ effect }},duration|{{ duration }}">bg_set_hsv</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="ct_value,effect|{{ effect }},duration|{{ duration }}">bg_set_ct_abx</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="count,action,flow_expression">bg_start_cf</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="">bg_stop_cf</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="class,val1,val2,val3*">bg_set_scene</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="">bg_set_default</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="power,effect|{{ effect }},duration,mode">bg_set_power</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="brightness,effect|{{ effect }},duration|{{ duration }}">bg_set_bright</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="action,prop">bg_set_adjust</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="">bg_toggle</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="">dev_toggle</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="percentage,duration|{{ duration }}">adjust_bright</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="percentage,duration|{{ duration }}">adjust_ct</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="percentage,duration|{{ duration }}">adjust_color</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="percentage,duration|{{ duration }}">bg_adjust_bright</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="percentage,duration|{{ duration }}">bg_adjust_ct</button>
+        </div>
+    <h3>Parameters</h3>
+    <div class="js-param-container mb-4">none</div>
+
+    <h2>URL</h2>
+
+    <div class="row">
+        <div class="col-12 col-md-10 mt-2">
+            <input type="text" class="form-control js-yeelight_api-url" data-default="/api/yeelight/" value="/api/yeelight/">
+            <div class="row mt-1"><strong class="col-md-2">format</strong><code class="col-md-10">/api/yeelight/{target}/{method}/{params*}/{responseId*}</br>* optional</code></div>
+            <div class="row mt-1"><strong class="col-md-2">responces</strong><div class="col-md-10 js-yeelight_api-response"></div></div>
+
+            <button class="btn btn-outline-danger mt-2 js-yeelight_api-clear">Clear</button>
+        </div>
+        <div class="col-12 col-md-2 mt-2">
+            <button class="btn btn-primary js-yeelight_api-execute">Execute</button>
+            <button class="btn btn-dark"><span class="fas fa-link js-copy-yeelight-url"></span></button>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-12">
+            <a href="files/Yeelight_manual.pdf" target="_blank">Download Yeelight manual</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="js/axios/axios.min.js"></script>
+    <script>
+        //execute call and write to log
+        document.querySelector('.js-yeelight_api-execute').addEventListener('click', function () {
+            axios.get(document.querySelector('.js-yeelight_api-url').value)
+                .then(function (response) {
+                    var today = new Date();
+                    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                    var dateTime = date+' '+time;
+
+                    const line = document.createElement('div');
+                    line.innerHTML = dateTime + '<code class="ml-2">' + JSON.stringify(response.data) + '</code>';
+                    document.querySelector('.js-yeelight_api-response').appendChild(line);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        });
+
+        //clear yeelight API log
+        document.querySelector('.js-yeelight_api-clear').addEventListener('click', function () {
+            document.querySelector('.js-yeelight_api-response').innerHTML = '';
+        });
+
+        //update target
+        document.querySelectorAll('.js-target').forEach(function (el) {
+            el.addEventListener('click', function (e) {
+                //clear all btns
+                document.querySelectorAll('.js-target').forEach(function (el2) {
+                    el2.classList.remove('btn-primary');
+                    el2.classList.add('btn-outline-primary');
+                });
+
+                //select clicked btn
+                e.currentTarget.classList.add('btn-primary');
+                e.currentTarget.classList.remove('btn-outline-primary');
+
+                updateApiUrl();
+            });
+        });
+
+        //update params
+        document.querySelectorAll('.js-method').forEach(function (el) {
+            el.addEventListener('click', function (e) {
+                //clear all btns
+                document.querySelectorAll('.js-method').forEach(function (el2) {
+                    el2.classList.remove('btn-primary');
+                    el2.classList.add('btn-outline-primary');
+                });
+
+                //select clicked btn
+                e.currentTarget.classList.add('btn-primary');
+                e.currentTarget.classList.remove('btn-outline-primary');
+
+                //build param list
+                let html = '<ul>';
+                const params = e.currentTarget.dataset.param.split(',');
+                console.log(params);
+                var paramCount = 0;
+                params.forEach(e => {
+                    e = e.split('|');
+                    param = e[0].replace('*', ' (optional)')
+
+                    html += '<li><div class="row d-flex align-items-center"><code class="col-md-2" style="min-width: 120px;">' + param + '</code>';
+
+                    if(e[1]) {
+                        html += '<div class="col-md-10">';
+                        e[1].split(';').forEach(f => {
+                            html += '<button class="btn btn-outline-primary mr-2 my-1 js-param js-param-' + paramCount + '" data-param-count="' + paramCount + '">' + f +'</button>';
+                        });
+                        html += '</div>';
+                    }
+
+                    html += '</div></li>';
+
+                    paramCount++;
+                });
+                html += '</ul>';
+                document.querySelector('.js-param-container').innerHTML = params[0] !== '' ? html : 'none';
+
+                refreshParamBtns();
+                updateApiUrl();
+            });
+        });
+
+        //copy Yeelight url
+        document.querySelector('.js-copy-yeelight-url').addEventListener('click', function() {
+            var copyText = document.querySelector('.js-yeelight_api-url');
+            backupVal = copyText.value;
+            copyText.value = '{{ ip }}' + backupVal;
+            copyText.select();
+            copyText.setSelectionRange(0, 99999)
+            document.execCommand("copy");
+            copyText.value = backupVal;
+        });
+
+
+        function updateApiUrl() {
+            //target
+            let target = '{target}';
+            const targetEl = document.querySelector('.js-target.btn-primary')
+            if(targetEl) {
+                target = targetEl.dataset.target;
+            }
+
+            //method
+            let method = '{method}';
+            const methodEl = document.querySelector('.js-method.btn-primary')
+            if(methodEl) {
+                method = methodEl.textContent;
+            }
+
+            //parameters
+            var params = [];
+            document.querySelectorAll('.js-param.btn-primary').forEach(function (el) {
+                params[el.dataset.paramCount] = el.textContent;
+            });
+
+
+            $url = document.querySelector('.js-yeelight_api-url');
+            $url.value = $url.dataset.default + target + '/' + method + '/' + params.toString();
+        }
+
+        function refreshParamBtns() {
+            document.querySelectorAll('.js-param').forEach(function (el) {
+                el.addEventListener('click', function (e) {
+                    //make all buttons unselected
+                    document.querySelectorAll('.js-param.js-param-' + el.dataset.paramCount).forEach(function (el2) {
+                        el2.classList.remove('btn-primary');
+                        el2.classList.add('btn-outline-primary');
+                    });
+
+                    //select clicked btn
+                    e.currentTarget.classList.add('btn-primary');
+                    e.currentTarget.classList.remove('btn-outline-primary');
+
+                    updateApiUrl();
+                })
+            });
+        }
+    </script>
+{% endblock %}
