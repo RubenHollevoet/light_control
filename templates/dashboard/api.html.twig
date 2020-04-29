@@ -29,10 +29,10 @@
             <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="rgb_value|{{ rgb }},effect|{{ effect }},duration|{{duration}}">set_rgb</button>
             <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="hue|{{ hue }},sat|{{ sat }},effect|{{ effect }},duration|{{ duration }}">set_hsv</button>
             <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="brightness|{{ brightness }},effect|{{ effect }},duration|{{ duration }}">set_bright</button>
-            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="power|on;off,effect|{{ effect }},duration|{{ duration }},mode*|0;1;2;3;4;5">set_power</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="power|on;off,effect|{{ effect }},duration|{{ duration }},mode*|0 (default);1 (CT);2 (RGB);3 (HSV);4 (color flow);5 (night mode)">set_power</button>
             <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="">toggle</button>
             <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="">set_default</button>
-            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="count|0;1;5,action|0;1;2,flow_expression|1000-2-2700-100-500-1-255-10-5000-7-0-0-500-2-5000-1">start_cf</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="count|0 (infinit);1;6,action|0 (recover);1 (stay);2 (turn off),flow_expression|1000-2-2700-100_500-1-255-10_5000-7-0-0_500-2-5000-1;300-2-6000-100_300-2-6000-1;100-2-6500-1_100-1-1-1_1000-7-0-0">start_cf</button>
             <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="">stop_cf</button>
             <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="class,val1,val2,val3*">set_scene</button>
             <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="type,value">cron_add</button>
@@ -74,7 +74,7 @@
         </div>
         <div class="col-12 col-md-2 mt-2">
             <button class="btn btn-primary js-yeelight_api-execute">Execute</button>
-            <button class="btn btn-dark"><span class="fas fa-link js-copy-yeelight-url"></span></button>
+            <button class="btn btn-dark js-copy-yeelight-url"><span class="fas fa-link"></span></button>
         </div>
     </div>
     <div class="row mt-4">
@@ -149,10 +149,10 @@
                     e = e.split('|');
                     param = e[0].replace('*', ' (optional)')
 
-                    html += '<li><div class="row d-flex align-items-center"><code class="col-md-2" style="min-width: 120px;">' + param + '</code>';
+                    html += '<li><div class="row d-flex align-items-center"><code class="col-md-3" style="min-width: 120px;">' + param + '</code>';
 
                     if(e[1]) {
-                        html += '<div class="col-md-10">';
+                        html += '<div class="col-md-9">';
                         e[1].split(';').forEach(f => {
                             html += '<button class="btn btn-outline-primary mr-2 my-1 js-param js-param-' + paramCount + '" data-param-count="' + paramCount + '">' + f +'</button>';
                         });
@@ -201,7 +201,7 @@
             //parameters
             var params = [];
             document.querySelectorAll('.js-param.btn-primary').forEach(function (el) {
-                params[el.dataset.paramCount] = el.textContent;
+                params[el.dataset.paramCount] = el.textContent.split(' ')[0];
             });
 
 

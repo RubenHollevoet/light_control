@@ -59,6 +59,7 @@ class YeelightController extends AbstractController
 ////        $params = $params === '0' ? [] : explode(',', $params, $maxParamCount);
         $params = $params === '0' ? [] : explode(',', $params);
         $params = str_replace('-', ',', $params);
+        $params = str_replace('_', ',', $params);
 
         if(strpos($target, 't') === 0) {
             $yeeResp = [];
