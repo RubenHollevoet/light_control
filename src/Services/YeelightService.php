@@ -69,8 +69,16 @@ class YeelightService
         $errno = '';
         $errstr = '';
 
-        if(! $fp = fsockopen($device->getIP(), 55443, $errno, $errstr, 30)) {
-            return false;
+        try {
+            if(! $fp = fsockopen($device->getIP(), 55443, $errno, $errstr, 3)) {
+                return false;
+            }
+        }
+        catch (\ErrorException $e) {
+            return '2 sec timeout connecting to '.$device->getIP() . ' - ' . $device->getName();
+        }
+        catch (\Exception $e) {
+            return 'error connecting to '.$device->getIP();
         }
 
         //convert string parameters to number if needed
@@ -96,6 +104,6 @@ class YeelightService
         }
         usleep(10 * 1000); //initial value = 100 * 1000
 
-        return json_decode($resultStr);;
+        return json_decode($resultStr);
     }
 }
