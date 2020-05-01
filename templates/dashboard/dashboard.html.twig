@@ -4,6 +4,29 @@
 
 {% block content %}
 <div>
+    <h2>Tags</h2>
+    {% for tag in tags %}
+        <div class="row d-flex align-items-center">
+            <div class="col-md-4">
+                <span class="btn btn-primary">{{ tag.name }}</span>
+            </div>
+            <div class="col-md-2">
+                <span><i class="fas fa-lightbulb fa-lg gray pr-2"></i>{{ tag.devices|length }}</span>
+            </div>
+            <div class="col-md-6 py-2 align-self-center">
+                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                    <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_power', 'params': 'on,sudden,0'}) }}">On</button>
+                    <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_power', 'params': 'off,sudden,0'}) }}">Off</button>
+                </div>
+                <div class="btn-group js-disable-when-off" role="group" aria-label="Button group with nested dropdown">
+                    <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_bright', 'params': '30,sudden,0'}) }}">30%</button>
+                    <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_bright', 'params': '100,sudden,0'}) }}">100%</button>
+                    <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_ct_abx', 'params': '2840,sudden,0'}) }}">WW</button>
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
     <h2>Devices</h2>
     {% for device in devices %}
         <div class="row js-yeelight py-2" data-id="{{ device.id }}">

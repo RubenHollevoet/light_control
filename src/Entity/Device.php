@@ -69,6 +69,11 @@ class Device
      */
     private $tags;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $order;
+
     public function __construct()
     {
         $this->scenes = new ArrayCollection();
@@ -222,5 +227,21 @@ class Device
         }
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param mixed $order
+     */
+    public function setOrder($order): void
+    {
+        $this->order = $order;
     }
 }

@@ -29,6 +29,11 @@ class Tag
      */
     private $Devices;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $order;
+
     public function __construct()
     {
         $this->Devices = new ArrayCollection();
@@ -80,5 +85,21 @@ class Tag
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param mixed $order
+     */
+    public function setOrder($order): void
+    {
+        $this->order = $order;
     }
 }

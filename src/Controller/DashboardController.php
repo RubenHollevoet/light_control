@@ -32,12 +32,14 @@ class DashboardController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $devices = $em->getRepository(Device::class)->findAll();
+        $devices = $em->getRepository(Device::class)->findOrdered();
+        $tags =  $em->getRepository(Tag::class)->findOrdered();
         $scenes =  $em->getRepository(Scene::class)->findAll();
 
         return $this->render('dashboard/dashboard.html.twig', [
             'scenes' => $scenes,
-            'devices' => $devices
+            'devices' => $devices,
+            'tags' => $tags
         ]);
     }
 
@@ -49,7 +51,7 @@ class DashboardController extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
 
-        $devices = $em->getRepository(Device::class)->findAll();
+        $devices = $em->getRepository(Device::class)->findOrdered();
         $form = $this->createForm(DevicesType::class, ['devices' => $devices]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -62,7 +64,7 @@ class DashboardController extends AbstractController
             }
 
             //update $tags
-            $devices = $em->getRepository(Tag::class)->findAll();
+            $devices = $em->getRepository(Tag::class)->findOrdered();
 
             //remove tags that aren't pushed anymore
 //            foreach ($tags as $tag) {
@@ -126,7 +128,7 @@ class DashboardController extends AbstractController
         $em = $this->getDoctrine()->getManager();
 
         $tags = $em->getRepository(Tag::class)->findAll();
-        $devices = $em->getRepository(Device::class)->findAll();
+        $devices = $em->getRepository(Device::class)->findOrdered();
 
         $ip = $_SERVER['REMOTE_ADDR'];
         if($_SERVER['SERVER_PORT'] !== 80 && $_SERVER['SERVER_PORT'] !== 443) {

@@ -2,6 +2,10 @@
     color: #343a40;
 }
 
+.gray {
+    color: #cccccc;
+}
+
 .tag-list {
     list-style: none;
     padding-left: 0;

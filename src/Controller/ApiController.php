@@ -32,7 +32,7 @@ class ApiController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
 
-        $devices = $em->getRepository(Device::class)->findAll();
+        $devices = $em->getRepository(Device::class)->findOrdered();
         $scenes =  $em->getRepository(Scene::class)->findAll();
 
         return $this->render('dashboard/dashboard.html.twig', [
