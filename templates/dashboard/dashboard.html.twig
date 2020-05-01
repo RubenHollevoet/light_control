@@ -7,10 +7,10 @@
     <h2>Tags</h2>
     {% for tag in tags %}
         <div class="row d-flex align-items-center">
-            <div class="col-md-4">
+            <div class="col-8 col-md-4">
                 <span class="btn btn-primary">{{ tag.name }}</span>
             </div>
-            <div class="col-md-2">
+            <div class="col-4">
                 <span><i class="fas fa-lightbulb fa-lg gray pr-2"></i>{{ tag.devices|length }}</span>
             </div>
             <div class="col-md-6 py-2 align-self-center">
