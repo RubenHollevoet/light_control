@@ -14,12 +14,16 @@ app.scenes:
     path: /scenes
     controller: App\Controller\DashboardController:scenes
 
+app.scenes.call:
+    path: /scenes/{scene}/call
+    controller: App\Controller\DashboardController:calls
+
 app.api:
     path: /api
     controller: App\Controller\DashboardController:api
 
 api.scene.trigger:
-    path: /api/scene/{id}
+    path: /api/scene/{slug}
     controller: App\Controller\Api\SceneController:trigger
 
 api.yeelight.execute:

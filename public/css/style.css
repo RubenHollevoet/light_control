@@ -6,6 +6,10 @@
     color: #cccccc;
 }
 
+.dark-gray {
+    color: #555555;
+}
+
 .tag-list {
     list-style: none;
     padding-left: 0;
@@ -13,6 +17,6 @@
 
 .icon-label {
     min-width: 34px;
-    color: #343a40;
+    color: #555555;
     text-align: center;
 }

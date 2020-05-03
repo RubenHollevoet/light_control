@@ -32,7 +32,7 @@
             <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="power|on;off,effect|{{ effect }},duration|{{ duration }},mode*|0 (default);1 (CT);2 (RGB);3 (HSV);4 (color flow);5 (night mode)">set_power</button>
             <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="">toggle</button>
             <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="">set_default</button>
-            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="count|0 (infinit);1;6,action|0 (recover);1 (stay);2 (turn off),flow_expression|1000-2-2700-100.500-1-255-10.5000-7-0-0.500-2-5000-1;300-2-6000-100.300-2-6000-1;100-2-6500-1.100-1-1-1.1000-7-0-0">start.cf</button>
+            <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="count|0 (infinit);1;6,action|0 (recover);1 (stay);2 (turn off),flow_expression|1000-2-2700-100.500-1-255-10.5000-7-0-0.500-2-5000-1;300-2-6000-100.300-2-6000-1;100-2-6500-1.100-1-1-1.1000-7-0-0">start_cf</button>
             <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="">stop_cf</button>
             <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="class,val1,val2,val3*">set_scene</button>
             <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="type,value">cron_add</button>
@@ -85,7 +85,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="js/axios/axios.min.js"></script>
+    <script src="/js/axios/axios.min.js"></script>
     <script>
         //execute call and write to log
         document.querySelector('.js-yeelight_api-execute').addEventListener('click', function () {
@@ -212,6 +212,8 @@
         function refreshParamBtns() {
             document.querySelectorAll('.js-param').forEach(function (el) {
                 el.addEventListener('click', function (e) {
+                    e.preventDefault();
+
                     //make all buttons unselected
                     document.querySelectorAll('.js-param.js-param-' + el.dataset.paramCount).forEach(function (el2) {
                         el2.classList.remove('btn-primary');

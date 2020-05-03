@@ -39,7 +39,7 @@
             </div>
             <div class="col-4 col-md-2 align-self-center">
                 <span><i class="fas fa-lightbulb fa-lg js-icon-lamp"></i></span>
-                <span><i class="fas fa-signal fa-lg ml-2"></i><span class="ml-1 js-icon-bright"></span></span>
+                <span><i class="fas fa-signal fa-lg ml-2 dark-gray"></i><span class="ml-1 js-icon-bright"></span></span>
             </div>
             <div class="col-md-6 py-2 align-self-center">
                 {% if device.brand == constant('App\\Entity\\Device::BRAND_YEELIGHT') %}
@@ -58,7 +58,7 @@
             </div>
             <div class="col-0 col-md-1"></div>
             <div class="col-12 col-md-11 d-flex align-items-center">
-                <span class="fas fa-tag"></span>
+                <span class="fas fa-tag dark-gray"></span>
                 {% for tag in device.tags %}
                     <span class="ml-2 badge badge-pill badge-primary">{{ tag.name }}</span>
                 {% endfor %}
@@ -78,8 +78,8 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="js/axios/axios.min.js"></script>
-    <script src="js/helpers.js"></script>
+    <script src="/js/axios/axios.min.js"></script>
+    <script src="/js/helpers.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function(event) {
             document.querySelectorAll('.js-device-info-action').forEach(function (el) {

@@ -5,8 +5,10 @@ namespace App\Services;
 
 
 use App\Entity\Device;
+use App\Entity\Tag;
 use Doctrine\ORM\EntityManagerInterface;
 use Socket\Raw\Factory;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Yeelight\Bulb\Bulb;
@@ -63,6 +65,36 @@ class YeelightService
             $device->setLastScan(new \DateTime());
         }
         $this->em->flush();
+    }
+
+    public function processEvent(string $target, string $method, string $params, int $responseId) {
+        $params = $params === '0' ? [] : explode(',', $params);
+        $params = str_replace('-', ',', $params);
+        $params = str_replace('.', ',', $params);
+
+        dump($params);
+
+        if(strpos($target, 't') === 0) {
+            $yeeResp = [];
+            /** @var Tag $tag */
+            if(null === $tag = $this->em->getRepository(Tag::class)->find(substr($target, 1))) {
+                throw new NotFoundHttpException('Unknown tag for id '.substr($target, 1));
+            }
+            foreach ($tag->getDevices() as $device) {
+                if($device->getBrand() === Device::BRAND_YEELIGHT) {
+                    $yeeResp[] = $this->execute($device, $method, $params, $responseId);
+                }
+            }
+        }
+        else {
+            /** @var Device $device */
+            if(null === $device = $this->em->getRepository(Device::class)->findOneBy(['id' => $target, 'brand' => Device::BRAND_YEELIGHT])) {
+                throw new NotFoundHttpException('No Yeelight registered with this ID');
+            }
+            $yeeResp = $this->execute($device, $method, $params, $responseId);
+        }
+
+        return new JsonResponse($yeeResp);
     }
 
     public function execute(Device $device, string $method, array $params, int $responseId = 0) {

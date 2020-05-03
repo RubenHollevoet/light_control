@@ -30,13 +30,19 @@ class Tag
     private $Devices;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true, name="order_")
      */
     private $order;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Call", mappedBy="tag")
+     */
+    private $calls;
 
     public function __construct()
     {
         $this->Devices = new ArrayCollection();
+        $this->calls = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,5 +107,36 @@ class Tag
     public function setOrder($order): void
     {
         $this->order = $order;
+    }
+
+    /**
+     * @return Collection|Call[]
+     */
+    public function getCalls(): Collection
+    {
+        return $this->calls;
+    }
+
+    public function addCall(Call $call): self
+    {
+        if (!$this->calls->contains($call)) {
+            $this->calls[] = $call;
+            $call->setTag($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCall(Call $call): self
+    {
+        if ($this->calls->contains($call)) {
+            $this->calls->removeElement($call);
+            // set the owning side to null (unless already changed)
+            if ($call->getTag() === $this) {
+                $call->setTag(null);
+            }
+        }
+
+        return $this;
     }
 }

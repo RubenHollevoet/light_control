@@ -1,0 +1,26 @@
+<div class="row js-scene mb-2">
+    <span class="col-md-4 mb-2 d-flex align-items-center">
+        <span class="fa fa-link fa-fw mr-2 dark-gray"></span>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">/api/scene/</span>
+            </div>
+            {{ form_widget(scene.slug, {'attr': {'class': 'js-url'}}) }}
+        </div>
+    </span>
+    <span class="col-md-4 mb-2 d-flex align-items-center">
+        <span class="fa fa-info fa-fw mr-2 dark-gray"></span>
+        {{ form_widget(scene.name) }}
+    </span>
+    <span class="col-md-4 mb-2">
+        {% set id = scene.vars.value.id|raw %}
+        {% if scene.vars.value.id %}
+            <a href="{{ path('app.scenes.call', { 'scene': scene.vars.value.id }) }}" class="btn btn-success"><span class="fas fa-pencil-alt fa-fw"></span></a>
+        {% else %}
+            <button class="btn btn-success" disabled="disabled"><span class="fas fa-pencil-alt fa-fw"></span></button>
+        {% endif %}
+        <button class="btn btn-danger js-remove-scene"><span class="fas fa-trash fa-fw"></span></button>
+        <button class="btn btn-dark js-copy-url"><span class="fas fa-link fa-fw"></span></button>
+        <button class="btn btn-primary js-execute"><span class="fas fa-play fa-fw"></span><span class="badge badge-light ml-2">{{ scene.vars.value.calls|length }}</span></button>
+    </span>
+</div>

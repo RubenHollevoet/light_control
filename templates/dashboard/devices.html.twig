@@ -3,15 +3,12 @@
 {% set pageTitle = 'Devices' %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="css/bootstrap/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap-select.min.css" />
 {% endblock %}
 
 {% block content %}
 
     {{ form_start(form) }}
-
-    {{ form_label(form.devices) }}
-    {{ form_errors(form.devices) }}
 
     <table>
         <thead></thead>
@@ -38,14 +35,13 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="js/popper/popper.min.js"></script>
-    <script src="js/bootstrap/bootstrap.bundle.min.js"></script>
-    <script src="js/bootstrap/bootstrap-select.min.js"></script>
-    <script src="js/axios/axios.min.js"></script>
+    <script src="/js/popper/popper.min.js"></script>
+    <script src="/js/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/js/bootstrap/bootstrap-select.min.js"></script>
+    <script src="/js/axios/axios.min.js"></script>
     <script>
         document.querySelectorAll('.js-ajax').forEach(function (el) {
             el.addEventListener('click', function (e) {
-                console.log('GOGOGO', e.currentTarget.dataset.url);
                 axios.get(e.currentTarget.dataset.url)
                     .catch(function (error) {
                         console.log(error);

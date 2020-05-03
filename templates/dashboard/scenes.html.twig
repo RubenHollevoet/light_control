@@ -3,5 +3,91 @@
 {% set pageTitle = 'Scenes' %}
 
 {% block content %}
-    <h2>Scenes</h2>
+
+    {{ form_start(form) }}
+
+    <div class="js-scenes"
+           data-prototype="{% apply escape %}{% include 'dashboard/_partials/scene.html.twig' with {scene: form.scenes.vars.prototype } only %}{% endapply %}"
+    >
+        {% for scene in form.scenes %}
+            {% include 'dashboard/_partials/scene.html.twig' with {scene: scene} only %}
+        {% endfor %}
+    </div>
+
+    <button type="button"
+            class="btn btn-outline-success mt-3 js-add-widget"
+            data-list-selector=".js-scenes">add scene</button>
+    <div class="mt-5">
+        {{ form_widget(form.save) }}
+    </div>
+
+
+    {{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/axios/axios.min.js"></script>
+    <script>
+        // add-collection-widget.js
+        $(document).ready(function () {
+            $('.js-add-widget').click(function (e) {
+                var list = $($(this).attr('data-list-selector'));
+                console.log(list);
+                var counter = list.data('widget-counter') || list.children().length;
+                console.log(counter);
+
+                var newWidget = list.attr('data-prototype');
+                console.log(newWidget);
+
+                newWidget = newWidget.replace(/__sceneid__/g, counter);
+                counter++;
+                console.log(newWidget)
+                list.data('widget-counter', counter);
+
+                $(list).append(newWidget);
+            });
+        });
+
+        //remove logic
+        $(document.body).on('click', '.js-remove-scene', function (e) {
+
+            var sceneCount = $('.js-scene').length;
+            $(this).closest('.js-scene').remove();
+        });
+
+        //copy link
+        document.querySelectorAll('.js-copy-url').forEach(function (el) {
+            el.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                var copyText = $(e.currentTarget).closest('.js-scene').find('.js-url')[0];
+                console.log(copyText);
+                backupVal = copyText.value;
+                copyText.value = '{{ ip }}' + '/api/scene/' + backupVal;
+                copyText.select();
+                copyText.setSelectionRange(0, 99999)
+                document.execCommand("copy");
+                copyText.value = backupVal;
+            });
+        });
+
+        //execute call
+        document.querySelectorAll('.js-execute').forEach(function (el) {
+            el.addEventListener('click', function (e) {
+                e.preventDefault();
+                const url = '/api/scene/' + $(e.currentTarget).closest('.js-scene').find('.js-url').val();
+                console.log(url);
+                axios.get(url)
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+                ;
+            });
+        });
+
+    </script>
 {% endblock %}

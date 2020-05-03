@@ -25,14 +25,19 @@ class Scene
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Device", inversedBy="scenes")
-     * @ORM\JoinTable(name="app_scene_device")
+     * @ORM\Column(type="string", length=255)
      */
-    private $Devices;
+    private $slug;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Call", mappedBy="scene")
+     */
+    private $calls;
 
     public function __construct()
     {
         $this->Devices = new ArrayCollection();
+        $this->calls = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -50,6 +55,22 @@ class Scene
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug): void
+    {
+        $this->slug = $slug;
     }
 
     /**
@@ -73,6 +94,37 @@ class Scene
     {
         if ($this->Devices->contains($device)) {
             $this->Devices->removeElement($device);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Call[]
+     */
+    public function getCalls(): Collection
+    {
+        return $this->calls;
+    }
+
+    public function addCall(Call $call): self
+    {
+        if (!$this->calls->contains($call)) {
+            $this->calls[] = $call;
+            $call->setScene($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCall(Call $call): self
+    {
+        if ($this->calls->contains($call)) {
+            $this->calls->removeElement($call);
+            // set the owning side to null (unless already changed)
+            if ($call->getScene() === $this) {
+                $call->setScene(null);
+            }
         }
 
         return $this;

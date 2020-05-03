@@ -1,0 +1,36 @@
+<div class="js-call">
+    <div class="row">
+        <span class="col-md-2 mb-2 d-flex align-items-center">
+            <span class="fa fa-clock mr-2 dark-gray"></span>
+            {{ form_widget(call.start) }}
+        </span>
+        <span class="col-md-4 mb-2 d-flex align-items-center">
+            <span class="fas fa-bars mr-2 dark-gray"></span>
+            {{ form_widget(call.api, { 'attr': {'class': 'selectpicker js-api'} }) }}
+        </span>
+        <span class="col-md-4 mb-2 d-flex align-items-center">
+            <span class="fas fa-tag mr-2 dark-gray"></span>/
+            <span class="fas fa-lightbulb mx-2 dark-gray"></span>
+            {{ form_widget(call.deviceTag, { 'attr': {'class': 'selectpicker js-tag-device'} }) }}
+
+        </span>
+        <span class="col-md-2 mb-2">
+            <button class="btn btn-primary js-ajax"><span class="fas fa-play"></span></button>
+        </span>
+    </div>
+    <div class="row">
+        <span class="col-md-10 mb-2 d-flex align-items-center">
+            <span class="fa fa-link mr-2 dark-gray"></span>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text js-url-prefix">/api/</span>
+                </div>
+                {{ form_widget(call.content, {'attr': {'class': 'js-url'}}) }}
+            </div>
+        </span>
+        <span class="col-md-2 mb-2">
+            <button class="btn btn-danger js-remove-call"><span class="fas fa-trash"></span></button>
+        </span>
+    </div>
+</div>

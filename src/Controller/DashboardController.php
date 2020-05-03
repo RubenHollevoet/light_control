@@ -2,17 +2,21 @@
 
 namespace App\Controller;
 
+use App\Entity\Call;
 use App\Entity\Device;
 use App\Entity\Scene;
 use App\Entity\Tag;
+use App\Form\CallsType;
 use App\Form\DashboardType;
 use App\Form\DevicesType;
+use App\Form\ScenesType;
 use App\Form\TagsType;
 use App\Services\FunService;
 use App\Services\YeelightService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractController
@@ -39,7 +43,7 @@ class DashboardController extends AbstractController
         return $this->render('dashboard/dashboard.html.twig', [
             'scenes' => $scenes,
             'devices' => $devices,
-            'tags' => $tags
+            'tags' => $tags,
         ]);
     }
 
@@ -63,22 +67,22 @@ class DashboardController extends AbstractController
                 $em->persist($formDevice);
             }
 
-            //update $tags
-            $devices = $em->getRepository(Tag::class)->findOrdered();
+            //update $devices
+            $devices = $em->getRepository(Device::class)->findOrdered();
 
             //remove tags that aren't pushed anymore
-//            foreach ($tags as $tag) {
-//                if(!in_array($tag, $newTags)) {
-//                    $em->remove($tag);
-//                }
-//            }
+            foreach ($devices as $device) {
+                if(!in_array($device, $formDevices, true)) {
+                    $em->remove($device);
+                }
+            }
 
             $em->flush();
         }
 
         return $this->render('dashboard/devices.html.twig', [
             'form' => $form->createView(),
-            'devices' => []
+            'devices' => [],
         ]);
     }
 
@@ -113,14 +117,102 @@ class DashboardController extends AbstractController
 
         return $this->render('dashboard/tags.html.twig', [
             'form' => $form->createView(),
-            'tags' => []
+            'tags' => [],
         ]);
     }
 
     public function scenes(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $scenes = $em->getRepository(Scene::class)->findAll();
+
+        $form = $this->createForm(ScenesType::class, ['scenes' => $scenes]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $formData = $form->getData();
+            $formScenes = $formData['scenes'];
+
+            //persist all new scenes
+            foreach ($formScenes as $scene) {
+                $em->persist($scene);
+            }
+
+            //update $scenes
+            $scenes = $em->getRepository(Scene::class)->findAll();
+
+            //remove $scenes that aren't pushed anymore
+            foreach ($scenes as $scene) {
+                if(!in_array($scene, $formScenes)) {
+                    $em->remove($scene);
+                }
+            }
+            $em->flush();
+        }
+
         return $this->render('dashboard/scenes.html.twig', [
-            'form' => '',
-            'scenes' => []
+            'ip' => $this->getHost(),
+            'form' => $form->createView(),
+            'scenes' => [],
+        ]);
+    }
+
+    public function calls(Request $request, $scene) {
+        $em = $this->getDoctrine()->getManager();
+        /** @var Scene $scene */
+        $scene = $em->getRepository(Scene::class)->find($scene);
+        $sceneCalls = $scene->getCalls();
+
+        $form = $this->createForm(CallsType::class, ['calls' => $scene->getCalls()]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $formCalls = [];
+            foreach ($form->get('calls') as $callData)
+            {
+                $deviceTag = $callData->get('deviceTag')->getData();
+                $api = $callData->get('api')->getData();                //ignored for now since can only be Yeelight
+
+                /** @var Call $call */
+                $call = $callData->getData();
+
+                if($deviceTag[0] === 't') {
+                    /** @var Tag $tag */
+                    if(null === $tag = $em->getRepository(Tag::class)->find(substr($deviceTag, 1))) {
+                        throw new NotFoundHttpException('Unknown tag for id '.substr($deviceTag, 1));
+                    }
+
+                    $call->setDevice(null);
+                    $call->setTag($tag);
+                }
+                else {
+                    /** @var Device $device */
+                    if(null === $device = $em->getRepository(Device::class)->find($deviceTag)) {
+                        throw new NotFoundHttpException('Unknown tag for id '.$deviceTag);
+                    }
+
+                    $call->setDevice($device);
+                    $call->setTag(null);
+                }
+
+
+                $formCalls[] = $call;
+
+                $call->setScene($scene);
+                $em->persist($call);
+            }
+
+            //remove $sceneCalls that aren't pushed anymore
+            foreach ($sceneCalls as $call) {
+                if(!in_array($call, $formCalls)) {
+                    $em->remove($call);
+                }
+            }
+            $em->flush();
+        }
+
+        return $this->render('dashboard/calls.html.twig', [
+            'scene' => $scene,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -130,16 +222,20 @@ class DashboardController extends AbstractController
         $tags = $em->getRepository(Tag::class)->findAll();
         $devices = $em->getRepository(Device::class)->findOrdered();
 
+        return $this->render('dashboard/api.html.twig', [
+            'ip' => $this->getHost(),
+            'tags' => $tags,
+            'devices' => $devices,
+            'scenes' => [],
+        ]);
+    }
+
+    private function getHost() {
         $ip = $_SERVER['REMOTE_ADDR'];
         if($_SERVER['SERVER_PORT'] !== 80 && $_SERVER['SERVER_PORT'] !== 443) {
             $ip .= ':'. $_SERVER['SERVER_PORT'];
         }
 
-        return $this->render('dashboard/api.html.twig', [
-            'ip' => $ip,
-            'tags' => $tags,
-            'devices' => $devices,
-            'scenes' => []
-        ]);
+        return $ip;
     }
 }

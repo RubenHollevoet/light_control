@@ -1,0 +1,109 @@
+{% extends 'dashboard/index.html.twig' %}
+
+{% set pageTitle = 'Calls ('~scene.name~')' %}
+{#{% set pageTitle = 'Calls ('~'/'~')' %}#}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap-select.min.css" />
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+
+    <div class="js-calls"
+           data-prototype="{% apply escape %}{% include 'dashboard/_partials/call.html.twig' with {call: form.calls.vars.prototype } only %}{% endapply %}"
+    >
+    {% for call in form.calls %}
+        {% include 'dashboard/_partials/call.html.twig' with {call: call } only %}
+    {% endfor %}
+    </div>
+
+    <button type="button"
+            class="btn btn-outline-success mt-3 js-add-widget"
+            data-list-selector=".js-calls">add call</button>
+
+    <div class="mt-5">
+        {{ form_widget(form.save) }}
+    </div>
+
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/popper/popper.min.js"></script>
+    <script src="/js/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="/js/bootstrap/bootstrap-select.min.js"></script>
+    <script src="/js/axios/axios.min.js"></script>
+    <script>
+        // add-collection-widget.js
+        $(document).ready(function () {
+            $('.js-add-widget').click(function (e) {
+                var list = $($(this).attr('data-list-selector'));
+                var counter = list.data('widget-counter') || list.children().length;
+
+                var newWidget = list.attr('data-prototype');
+                newWidget = newWidget.replace(/__callid__/g, counter);
+                counter++;
+                list.data('widget-counter', counter);
+
+                $(list).append(newWidget);
+                $('.selectpicker').selectpicker('refresh');
+                newWidget = $('.js-call').last()[0];
+                console.log('newWidget', newWidget);
+                updatePrefix(newWidget);
+
+                bindEventsOnDropdownChange([newWidget.querySelector('.js-tag-device')]);
+                bindEventsOnDropdownChange([newWidget.querySelector('.js-api')]);
+            });
+        });
+
+        //remove logic
+        $(document.body).on('click', '.js-remove-call', function (e) {
+            e.preventDefault();
+
+            var callCount = $(this.closest('.js-calls')).find('tr').length;
+            $(this).closest('.js-call').remove();
+        });
+
+        document.querySelectorAll('.js-tag').forEach(function (el) {
+            el.addEventListener('change', function(e) {
+                $(e.currentTarget).closest('.js-device').value = '';
+            });
+        });
+
+        //update api prefix
+        bindEventsOnDropdownChange(document.querySelectorAll('.js-tag-device, .js-api'));
+
+        function updatePrefix($callEl) {
+            $callEl.querySelector('.js-url-prefix').textContent = '/api/' + $callEl.querySelector('select.js-api').value + '/' + $callEl.querySelector('select.js-tag-device').value + '/';
+        }
+
+        function bindEventsOnDropdownChange(elms) {
+            elms.forEach(function (el) {
+                el.addEventListener('change', function(e) {
+                    updatePrefix($(e.currentTarget).closest('.js-call')[0]);
+                });
+
+                updatePrefix($(el).closest('.js-call')[0]);
+            });
+        }
+
+        //execute ajax call
+        document.querySelectorAll('.js-ajax').forEach(function (el) {
+            el.addEventListener('click', function (e) {
+                e.preventDefault();
+                const call = $(e.currentTarget).closest('.js-call');
+                const url = call.find('.js-url-prefix').text() + call.find('.js-url').val();
+                axios.get(url)
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+                ;
+            });
+        });
+    </script>
+{% endblock %}

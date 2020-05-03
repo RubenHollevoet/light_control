@@ -49,19 +49,10 @@
         </div>
     </td>
 
-
-
     <td class="">
         {% if device.vars.value.brand == constant('App\\Entity\\Device::BRAND_YEELIGHT') %}
             <button type="button" class="btn btn-primary mb-2 js-ajax" data-url="{{ path('api.yeelight.execute', {'target': device.vars.value.id, 'method': 'start_cf', 'params': '6,0,300-2-6000-100-300-2-6000-1'}) }}"><span class="fas fa-bolt fa-fw"></span></button>
-
-{#            <button class="btn btn-danger mr-2 js-remove-device"><span class="fas fa-trash"></span></button>#}
         {% endif %}
         <button class="btn btn-danger mr-2 js-remove-device"><span class="fas fa-trash fa-fw"></span></button>
-    </td>
-    <td>
-
-
-{#        <span class="fas fa-layer-group"></span> {{ device.vars.value.devices|length }}#}
     </td>
 </tr>

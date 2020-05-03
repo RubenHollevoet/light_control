@@ -59,13 +59,9 @@ class Device
     private $lastScan;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Scene", mappedBy="Devices")
-     */
-    private $scenes;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Tag", inversedBy="Devices")
      * @ORM\JoinTable(name="app_tag_device")
+     * @ORM\OrderBy({"order" = "DESC"})
      */
     private $tags;
 
@@ -74,10 +70,16 @@ class Device
      */
     private $order;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Call", mappedBy="device")
+     */
+    private $calls;
+
     public function __construct()
     {
         $this->scenes = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->calls = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -243,5 +245,41 @@ class Device
     public function setOrder($order): void
     {
         $this->order = $order;
+    }
+
+    /**
+     * @return Collection|Call[]
+     */
+    public function getCalls(): Collection
+    {
+        return $this->calls;
+    }
+
+    public function addCall(Call $call): self
+    {
+        if (!$this->calls->contains($call)) {
+            $this->calls[] = $call;
+            $call->setDevice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCall(Call $call): self
+    {
+        if ($this->calls->contains($call)) {
+            $this->calls->removeElement($call);
+            // set the owning side to null (unless already changed)
+            if ($call->getDevice() === $this) {
+                $call->setDevice(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
     }
 }
