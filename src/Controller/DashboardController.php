@@ -7,17 +7,13 @@ use App\Entity\Device;
 use App\Entity\Scene;
 use App\Entity\Tag;
 use App\Form\CallsType;
-use App\Form\DashboardType;
 use App\Form\DevicesType;
 use App\Form\ScenesType;
 use App\Form\TagsType;
-use App\Services\FunService;
 use App\Services\YeelightService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractController
 {
@@ -40,7 +36,12 @@ class DashboardController extends AbstractController
         $tags =  $em->getRepository(Tag::class)->findOrdered();
         $scenes =  $em->getRepository(Scene::class)->findAll();
 
+        $sceneLabels = $em->createQuery('SELECT s.label FROM App\Entity\Scene s GROUP BY s.label')->getResult();
+        $sceneLabels = array_column($sceneLabels, 'label');
+        $sceneLabels = array_filter($sceneLabels);
+
         return $this->render('dashboard/dashboard.html.twig', [
+            'sceneLabels' => $sceneLabels,
             'scenes' => $scenes,
             'devices' => $devices,
             'tags' => $tags,
@@ -149,10 +150,15 @@ class DashboardController extends AbstractController
             $em->flush();
         }
 
+        $sceneLabels = $em->createQuery('SELECT s.label FROM App\Entity\Scene s GROUP BY s.label')->getResult();
+        $sceneLabels = array_column($sceneLabels, 'label');
+        $sceneLabels = array_filter($sceneLabels);
+
         return $this->render('dashboard/scenes.html.twig', [
+            'sceneLabels' => $sceneLabels,
             'ip' => $this->getHost(),
             'form' => $form->createView(),
-            'scenes' => [],
+//            'scenes' => [],
         ]);
     }
 

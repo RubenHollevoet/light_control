@@ -1,5 +1,5 @@
 <div class="row js-scene mb-2">
-    <span class="col-md-4 mb-2 d-flex align-items-center">
+    <span class="col-md-3 mb-2 d-flex align-items-center">
         <span class="fa fa-link fa-fw mr-2 dark-gray"></span>
         <div class="input-group">
             <div class="input-group-prepend">
@@ -8,9 +8,18 @@
             {{ form_widget(scene.slug, {'attr': {'class': 'js-url'}}) }}
         </div>
     </span>
-    <span class="col-md-4 mb-2 d-flex align-items-center">
+    <span class="col-md-3 mb-2 d-flex align-items-center">
         <span class="fa fa-info fa-fw mr-2 dark-gray"></span>
         {{ form_widget(scene.name) }}
+    </span>
+    <span class="col-md-2 mb-2 d-flex align-items-center">
+        <span class="fa fa-tag fa-fw mr-2 dark-gray"></span>
+        {{ form_widget(scene.label, {'attr':{'list':'scene-labels-'~scene.vars.value.id}}) }}
+        <datalist id="scene-labels-{{ scene.vars.value.id }}">
+            {% for sceneLabel in sceneLabels %}
+                <option>{{ sceneLabel }}</option>
+            {% endfor %}
+        </datalist>
     </span>
     <span class="col-md-4 mb-2">
         {% set id = scene.vars.value.id|raw %}

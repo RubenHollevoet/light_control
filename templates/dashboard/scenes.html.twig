@@ -7,10 +7,10 @@
     {{ form_start(form) }}
 
     <div class="js-scenes"
-           data-prototype="{% apply escape %}{% include 'dashboard/_partials/scene.html.twig' with {scene: form.scenes.vars.prototype } only %}{% endapply %}"
+           data-prototype="{% apply escape %}{% include 'dashboard/_partials/scene.html.twig' with {scene: form.scenes.vars.prototype, sceneLabels: sceneLabels } only %}{% endapply %}"
     >
         {% for scene in form.scenes %}
-            {% include 'dashboard/_partials/scene.html.twig' with {scene: scene} only %}
+            {% include 'dashboard/_partials/scene.html.twig' with {scene: scene, sceneLabels: sceneLabels} only %}
         {% endfor %}
     </div>
 

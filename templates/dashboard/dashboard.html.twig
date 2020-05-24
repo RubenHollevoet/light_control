@@ -8,7 +8,21 @@
 
 {% block content %}
 <div>
-    <h2>Tags</h2>
+    <h2 class="mt-3">Scenes</h2>
+    {% for sceneLabel in sceneLabels %}
+        <div class="ml-2 mt-3">
+            <h5 class="text-secondary">{{ sceneLabel }}</h5>
+            {% for scene in scenes %}
+                {% if scene.label == sceneLabel %}
+                    <button type="button" class="btn btn-outline-primary btn-lg js-ajax" data-url="{{ path('api.scene.trigger', {'slug': scene.slug}) }}">{{ scene.name }}</button>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>There are no scenes configured</p>
+        <a href="{{ path('app.scenes') }}" class="btn btn-success">create scene</a>
+    {% endfor %}
+    <h2 class="mt-5">Tags</h2>
     {% for tag in tags %}
         <div class="row d-flex align-items-center js-tag" data-devices="{{ tag.deviceIdString }}">
             <div class="col-md-5">
@@ -27,7 +41,7 @@
         </div>
 
     {% endfor %}
-    <h2>Devices</h2>
+    <h2 class="mt-5">Devices</h2>
     {% for device in devices %}
         <div class="row js-yeelight py-3" data-id="{{ device.id }}">
             <div class="col-2 col-md-1 align-self-center">
@@ -71,12 +85,6 @@
         <a href="{{ path('app.devices') }}" class="btn btn-success">register device</a>
     {% endfor %}
     </div>
-    <h2>Scenes</h2>
-    {% for scene in scenes %}
-    {% else %}
-        <p>There are no scenes configured</p>
-        <a href="{{ path('app.scenes') }}" class="btn btn-success">create scene</a>
-    {% endfor %}
 {% endblock %}
 
 {% block javascripts %}

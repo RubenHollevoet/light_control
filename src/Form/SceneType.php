@@ -19,6 +19,10 @@ class SceneType extends AbstractType
             ->add('slug', TextType::class, [
                 'label' => false
             ])
+            ->add('label', TextType::class, [
+                'label' => false,
+                'required' => false
+            ])
         ;
     }
 
