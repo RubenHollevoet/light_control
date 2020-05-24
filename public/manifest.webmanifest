@@ -1,0 +1,23 @@
+{
+  "short_name": "Light Control",
+  "name": "Light Control",
+  "description": "Control IP enabled bulbs and custom devices",
+  "icons": [
+    {
+      "src": "/img/bulb-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/img/bulb-1024x1024.png",
+      "type": "image/png",
+      "sizes": "1024x1024"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#467bfe",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#467bfe",
+  "shortcuts": []
+}

@@ -72,8 +72,6 @@ class YeelightService
         $params = str_replace('-', ',', $params);
         $params = str_replace('.', ',', $params);
 
-        dump($params);
-
         if(strpos($target, 't') === 0) {
             $yeeResp = [];
             /** @var Tag $tag */

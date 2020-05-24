@@ -2,31 +2,34 @@
 
 {% set pageTitle = 'Dashboard' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="/css/slider.css"/>
+{% endblock %}
+
 {% block content %}
 <div>
     <h2>Tags</h2>
     {% for tag in tags %}
-        <div class="row d-flex align-items-center">
-            <div class="col-7 col-md-6">
+        <div class="row d-flex align-items-center js-tag" data-devices="{{ tag.deviceIdString }}">
+            <div class="col-md-5">
                 <span class="btn btn-primary">{{ tag.name }}<span class="badge badge-light ml-2">{{ tag.devices|length }}</span></span>
             </div>
-            <div class="col-md-6 py-2 align-self-center">
-                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <div class="col-md-7 py-2 align-items-center d-flex">
+                <div class="btn-group mr-3" role="group" aria-label="Button group with nested dropdown">
                     <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_power', 'params': 'on,sudden,0'}) }}">On</button>
-                    <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_power', 'params': 'off,sudden,0'}) }}">Off</button>
+                    <button type="button" class="btn btn-outline-primary js-ajax js-disable-when-off" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_power', 'params': 'off,sudden,0'}) }}">Off</button>
+                    <button type="button" class="btn btn-outline-primary js-ajax js-disable-when-off" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_ct_abx', 'params': '2840,sudden,0'}) }}">WW</button>
                 </div>
-                <div class="btn-group js-disable-when-off" role="group" aria-label="Button group with nested dropdown">
-                    <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_bright', 'params': '30,sudden,0'}) }}">30%</button>
-                    <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_bright', 'params': '100,sudden,0'}) }}">100%</button>
-                    <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_ct_abx', 'params': '2840,sudden,0'}) }}">WW</button>
-                </div>
+                <span class="flex-grow-1">
+                    <input type="range" min="1" max="100" class="slider js-slider-group js-disable-when-off" id="slider-device-t{{ tag.id }}" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_bright', 'params': '__brightness__,sudden,50'}) }}">
+                </span>
             </div>
         </div>
 
     {% endfor %}
     <h2>Devices</h2>
     {% for device in devices %}
-        <div class="row js-yeelight py-2" data-id="{{ device.id }}">
+        <div class="row js-yeelight py-3" data-id="{{ device.id }}">
             <div class="col-2 col-md-1 align-self-center">
                 {% if device.brand == constant('App\\Entity\\Device::BRAND_YEELIGHT') %}
                     <img src="{{ asset('img/icons/yeelight.png') }}" width="48" height="48" alt="icon yeelight">
@@ -34,24 +37,23 @@
                     <img src="{{ asset('img/icons/arduino.png') }}" width="48" height="48" alt="icon yeelight">
                 {% endif %}
             </div>
-            <div class="col-6 col-md-3 align-self-center">
+            <div class="col-5 col-md-2 align-self-center">
                 {{ device.name }}
             </div>
-            <div class="col-4 col-md-2 align-self-center">
+            <div class="col-5 col-md-2 align-self-center">
                 <span><i class="fas fa-lightbulb fa-lg js-icon-lamp"></i></span>
                 <span><i class="fas fa-signal fa-lg ml-2 dark-gray"></i><span class="ml-1 js-icon-bright"></span></span>
             </div>
-            <div class="col-md-6 py-2 align-self-center">
+            <div class="col-md-7 py-2 align-items-center d-flex">
                 {% if device.brand == constant('App\\Entity\\Device::BRAND_YEELIGHT') %}
-                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                    <div class="btn-group mr-3" role="group" aria-label="Button group with nested dropdown">
                         <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_power', 'params': 'on,sudden,0'}) }}">On</button>
-                        <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_power', 'params': 'off,sudden,0'}) }}">Off</button>
+                        <button type="button" class="btn btn-outline-primary js-ajax js-disable-when-off" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_power', 'params': 'off,sudden,0'}) }}">Off</button>
+                        <button type="button" class="btn btn-outline-primary js-ajax js-disable-when-off" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_ct_abx', 'params': '2840,sudden,0'}) }}">WW</button>
                     </div>
-                    <div class="btn-group js-disable-when-off" role="group" aria-label="Button group with nested dropdown">
-                        <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_bright', 'params': '30,sudden,0'}) }}">30%</button>
-                        <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_bright', 'params': '100,sudden,0'}) }}">100%</button>
-                        <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_ct_abx', 'params': '2840,sudden,0'}) }}">WW</button>
-                    </div>
+                    <span class="flex-grow-1">
+                        <input type="range" min="1" max="100" class="slider js-slider js-disable-when-off" id="slider-device-{{ device.id }}" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_bright', 'params': '__brightness__,sudden,50'}) }}">
+                    </span>
                 {% elseif device.brand == constant('App\\Entity\\Device::BRAND_ARDUINO') %}
                     <p>todo: Arduino actions</p>
                 {% endif %}
@@ -78,6 +80,7 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script src="/js/bootstrap/bootstrap.js"></script>
     <script src="/js/axios/axios.min.js"></script>
     <script src="/js/helpers.js"></script>
     <script>
@@ -93,25 +96,15 @@
 
             document.querySelectorAll('.js-ajax').forEach(function (el) {
                 el.addEventListener('click', function (e) {
-                    axios.get(e.currentTarget.dataset.url)
-                        .then(function (response) {
-                            // handle success
-                            updateLight($(el).closest('.js-yeelight').data('id'));
-                        })
-                        .catch(function (error) {
-                            // handle error
-                            console.log(error);
-                        })
-                    ;
+                    updateLight(e.currentTarget.dataset.url, [$(el).closest('.js-yeelight').data('id')]);
                 });
             });
         });
 
-        updateLight();
-
-        function updateLight(lightId = 0) {
+        function updateLightIcons(lightId = 0) {
+            lightId = Number(lightId);
             document.querySelectorAll('.js-yeelight').forEach(function (el) {
-                if(!lightId || lightId === Number(el.dataset.id)) {
+                if(lightId === 0 || lightId === Number(el.dataset.id)) {
                     axios.get('/api/yeelight/' +  el.dataset.id + '/get_prop/power,bright,color_mode,ct,rgb')
                         .then(function (response) {
                             const data = response.data.result;
@@ -134,18 +127,54 @@
                             }
 
                             el.querySelector('.js-icon-bright').textContent = data[1] + '%';
+                            el.querySelector('.js-slider').value = data[1];
 
                             // enable/disable action buttons when on/of
-                            el.querySelectorAll('.js-disable-when-off > .btn').forEach(function (actionBtn) {
+                            el.querySelectorAll('.js-disable-when-off').forEach(function (actionBtn) {
                                 actionBtn.disabled = data[0] !== 'on';
                             });
                         })
                         .catch(function (error) {
                             // handle error
-                            console.log(error);
                         });
                 }
             })
+        }
+
+        //slider logic
+        document.querySelectorAll('.js-slider').forEach(function (el) {
+            el.addEventListener('mouseup', function (e) {
+                updateLight(e.currentTarget.dataset.url.replace('__brightness__', e.currentTarget.value), [$(e.currentTarget).closest('.js-yeelight').data('id')]);
+            });
+
+            el.addEventListener('touchend', function (e) {
+                updateLight(e.currentTarget.dataset.url.replace('__brightness__', e.currentTarget.value), [$(e.currentTarget).closest('.js-yeelight').data('id')]);
+            });
+        });
+
+        document.querySelectorAll('.js-slider-group').forEach(function (el) {
+            el.addEventListener('mouseup', function (e) {
+                updateLight(e.currentTarget.dataset.url.replace('__brightness__', e.currentTarget.value), $(e.currentTarget).closest('.js-tag').data('devices').split(','));
+            });
+
+            el.addEventListener('touchend', function (e) {
+                updateLight(e.currentTarget.dataset.url.replace('__brightness__', e.currentTarget.value), $(e.currentTarget).closest('.js-tag').data('devices').split(','));
+            });
+        });
+
+        updateLightIcons();
+
+        function updateLight(url, lightIds) {
+            axios.get(url)
+                .then(function (response) {
+                    // handle success
+                    lightIds.forEach(lightId => updateLightIcons(lightId));
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
+            ;
         }
     </script>
 {% endblock %}

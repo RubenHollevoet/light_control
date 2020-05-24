@@ -139,4 +139,16 @@ class Tag
 
         return $this;
     }
+
+    public function getDeviceIdString() {
+
+        $deviceIds = [];
+
+        /** @var Device $device */
+        foreach ($this->getDevices() as $device) {
+            $deviceIds[] = $device->getId();
+        }
+
+        return implode(',', $deviceIds);
+    }
 }
