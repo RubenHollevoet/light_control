@@ -2,6 +2,17 @@
 
 {% set pageTitle = 'API' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/> <!-- 'classic' theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/monolith.min.css"/> <!-- 'monolith' theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css"/>
+ {#   <style>
+        .color-picker {
+            position: static;
+        }
+    </style>#}
+{% endblock %}
+
 {% block content %}
     <h2>Yeelight</h2>
     <h4>Devices</h4>
@@ -60,9 +71,9 @@
             <button type="button" class="btn btn-outline-primary mb-1 js-method" data-param="percentage,duration|{{ duration }}">bg_adjust_ct</button>
         </div>
     <h3>Parameters</h3>
-    <div class="js-param-container mb-4">none</div>
+    <div class="js-param-container">none</div>
 
-    <h2>URL</h2>
+    <h2 class="mt-4">URL</h2>
 
     <div class="row">
         <div class="col-12 col-md-10 mt-2">
@@ -77,6 +88,15 @@
             <button class="btn btn-dark js-copy-yeelight-url"><span class="fas fa-link"></span></button>
         </div>
     </div>
+    <h2 class="mt-4">Tools</h2>
+    <div class="row mt-4">
+        <div class="ml-3">
+            <span class="js-color-picker"></span>
+            <span class="js-color-picker-result">123456</span>
+        </div>
+
+    </div>
+
     <div class="row mt-4">
         <div class="col-12">
             <a href="files/Yeelight_manual.pdf" target="_blank">Download Yeelight manual</a>
@@ -86,6 +106,8 @@
 
 {% block javascripts %}
     <script src="/js/axios/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.es5.min.js"></script>
     <script>
         //execute call and write to log
         document.querySelector('.js-yeelight_api-execute').addEventListener('click', function () {
@@ -228,5 +250,50 @@
                 })
             });
         }
+
+        const pickr = Pickr.create({
+            el: '.js-color-picker',
+            theme: 'classic', // or 'monolith', or 'nano'
+            position: 'bottom-end',
+
+            swatches: [
+                'rgb(244, 67, 54)',
+                'rgb(233, 30, 99)',
+                'rgb(156, 39, 176)',
+                'rgb(103, 58, 183)',
+                'rgb(63, 81, 181)',
+                'rgb(33, 150, 243)',
+                'rgb(3, 169, 244)',
+                'rgb(0, 188, 212)',
+                'rgb(0, 150, 136)',
+                'rgb(76, 175, 80)',
+                'rgb(139, 195, 74)',
+                'rgb(205, 220, 57)',
+                'rgb(255, 235, 59)',
+                'rgb(255, 193, 7)'
+            ],
+
+            components: {
+
+                // Main components
+                preview: true,
+                opacity: false,
+                hue: true,
+
+                // Input / output Options
+                interaction: {
+                    save: truelt,  // Display Save Button,
+                }
+            }
+        });
+
+        pickr.on('change', (color, instance) => {
+
+            // console.log(color);
+            const rgb = color.toRGBA();
+            document.querySelector('.js-color-picker-result').textContent = Math.round(rgb[0])*256*256 + Math.round(rgb[1])*256 + Math.round(rgb[2]);
+            // console.log('changestop', instance._color.toRGBA())
+            // console.log('changestop', instance._colo)
+        });
     </script>
 {% endblock %}

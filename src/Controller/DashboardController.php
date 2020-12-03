@@ -236,6 +236,15 @@ class DashboardController extends AbstractController
         ]);
     }
 
+    public function screen(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        return $this->render('dashboard/screen.html.twig', [
+            'devices' => [],
+            'scenes' => [],
+        ]);
+    }
+
     private function getHost() {
         $ip = $_SERVER['REMOTE_ADDR'];
         if($_SERVER['SERVER_PORT'] !== 80 && $_SERVER['SERVER_PORT'] !== 443) {

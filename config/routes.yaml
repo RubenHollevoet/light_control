@@ -22,6 +22,10 @@ app.api:
     path: /api
     controller: App\Controller\DashboardController:api
 
+app.screen:
+    path: /screen
+    controller: App\Controller\DashboardController:screen
+
 api.scene.trigger:
     path: /api/scene/{slug}
     controller: App\Controller\Api\SceneController:trigger

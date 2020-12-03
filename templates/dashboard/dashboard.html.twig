@@ -32,7 +32,7 @@
                 <div class="btn-group mr-3" role="group" aria-label="Button group with nested dropdown">
                     <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_power', 'params': 'on,sudden,0'}) }}">On</button>
                     <button type="button" class="btn btn-outline-primary js-ajax js-disable-when-off" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_power', 'params': 'off,sudden,0'}) }}">Off</button>
-                    <button type="button" class="btn btn-outline-primary js-ajax js-disable-when-off" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_ct_abx', 'params': '2840,sudden,0'}) }}">WW</button>
+                    <button type="button" class="btn btn-outline-primary js-ajax js-disable-when-off" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_ct_abx', 'params': '2950,sudden,0'}) }}">WW</button>
                 </div>
                 <span class="flex-grow-1">
                     <input type="range" min="1" max="100" class="slider js-slider-group js-disable-when-off" id="slider-device-t{{ tag.id }}" data-url="{{ path('api.yeelight.execute', {'target': 't'~tag.id, 'method': 'set_bright', 'params': '__brightness__,sudden,50'}) }}">
@@ -63,7 +63,7 @@
                     <div class="btn-group mr-3" role="group" aria-label="Button group with nested dropdown">
                         <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_power', 'params': 'on,sudden,0'}) }}">On</button>
                         <button type="button" class="btn btn-outline-primary js-ajax js-disable-when-off" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_power', 'params': 'off,sudden,0'}) }}">Off</button>
-                        <button type="button" class="btn btn-outline-primary js-ajax js-disable-when-off" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_ct_abx', 'params': '2840,sudden,0'}) }}">WW</button>
+                        <button type="button" class="btn btn-outline-primary js-ajax js-disable-when-off" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_ct_abx', 'params': '2950,sudden,0'}) }}">WW</button>
                     </div>
                     <span class="flex-grow-1">
                         <input type="range" min="1" max="100" class="slider js-slider js-disable-when-off" id="slider-device-{{ device.id }}" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_bright', 'params': '__brightness__,sudden,50'}) }}">
