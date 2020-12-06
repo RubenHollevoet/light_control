@@ -14,4 +14,10 @@
     <td>
         <button class="btn btn-danger mr-2 js-remove-tag"><span class="fas fa-trash"></span></button>
     </td>
+    <td>
+        <div class="mr-2">
+            {{ form_errors(tag.cluster) }}
+            {{ form_widget(tag.cluster) }}
+        </div>
+    </td>
 </tr>

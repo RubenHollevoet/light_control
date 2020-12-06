@@ -206,9 +206,16 @@ class Device
     /**
      * @return Collection|Tag[]
      */
-    public function getTags(): Collection
+    public function getTags($ignoreClusters = false): array
     {
-        return $this->tags;
+        if($ignoreClusters) {
+
+            return array_filter($this->tags->toArray(), static function (Tag $tag) {
+                return !$tag->isCluster();
+            });
+        }
+
+        return $this->tags->toArray();
     }
 
     public function addTag(Tag $tag): self
@@ -219,6 +226,18 @@ class Device
         }
 
         return $this;
+    }
+
+    public function getClusterTag(): ?Tag
+    {
+        foreach ($this->getTags() as $tag)
+        {
+            if($tag->isCluster()) {
+                return $tag;
+            }
+        }
+
+        return null;
     }
 
     public function removeTag(Tag $tag): self

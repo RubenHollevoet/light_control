@@ -39,6 +39,11 @@ class Tag
      */
     private $calls;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $cluster;
+
     public function __construct()
     {
         $this->Devices = new ArrayCollection();
@@ -138,6 +143,22 @@ class Tag
         }
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isCluster()
+    {
+        return $this->cluster;
+    }
+
+    /**
+     * @param mixed $cluster
+     */
+    public function setCluster($cluster): void
+    {
+        $this->cluster = $cluster;
     }
 
     public function getDeviceIdString() {

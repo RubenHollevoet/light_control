@@ -42,41 +42,46 @@
 
     {% endfor %}
     <h2 class="mt-5">Devices</h2>
-    {% for device in devices %}
-        <div class="row js-yeelight py-3" data-id="{{ device.id }}">
+
+
+    {% for key, fixture in fixtures %}
+        <div class="row js-yeelight py-3" data-id="{{ key }}">
             <div class="col-2 col-md-1 align-self-center">
-                {% if device.brand == constant('App\\Entity\\Device::BRAND_YEELIGHT') %}
+                {% if fixture.brand == constant('App\\Entity\\Device::BRAND_YEELIGHT') %}
                     <img src="{{ asset('img/icons/yeelight.png') }}" width="48" height="48" alt="icon yeelight">
-                {% elseif device.brand == constant('App\\Entity\\Device::BRAND_ARDUINO') %}
+                {% elseif fixture.brand == constant('App\\Entity\\Device::BRAND_ARDUINO') %}
                     <img src="{{ asset('img/icons/arduino.png') }}" width="48" height="48" alt="icon yeelight">
+                {% endif %}
+                {% if fixture.isCluster %}
+                    <i class="fas fa-layer-group"></i>
                 {% endif %}
             </div>
             <div class="col-5 col-md-2 align-self-center">
-                {{ device.name }}
+                {{ fixture.name }}
             </div>
             <div class="col-5 col-md-2 align-self-center">
                 <span><i class="fas fa-lightbulb fa-lg js-icon-lamp"></i></span>
                 <span><i class="fas fa-signal fa-lg ml-2 dark-gray"></i><span class="ml-1 js-icon-bright"></span></span>
             </div>
             <div class="col-md-7 py-2 align-items-center d-flex">
-                {% if device.brand == constant('App\\Entity\\Device::BRAND_YEELIGHT') %}
+                {% if fixture.brand == constant('App\\Entity\\Device::BRAND_YEELIGHT') %}
                     <div class="btn-group mr-3" role="group" aria-label="Button group with nested dropdown">
-                        <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_power', 'params': 'on,sudden,0'}) }}">On</button>
-                        <button type="button" class="btn btn-outline-primary js-ajax js-disable-when-off" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_power', 'params': 'off,sudden,0'}) }}">Off</button>
-                        <button type="button" class="btn btn-outline-primary js-ajax js-disable-when-off" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_ct_abx', 'params': '3030,sudden,0'}) }}">WW</button>
+                        <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': key, 'method': 'set_power', 'params': 'on,sudden,0'}) }}">On</button>
+                        <button type="button" class="btn btn-outline-primary js-ajax js-disable-when-off" data-url="{{ path('api.yeelight.execute', {'target': key, 'method': 'set_power', 'params': 'off,sudden,0'}) }}">Off</button>
+                        <button type="button" class="btn btn-outline-primary js-ajax js-disable-when-off" data-url="{{ path('api.yeelight.execute', {'target': key, 'method': 'set_ct_abx', 'params': '3030,sudden,0'}) }}">WW</button>
                     </div>
                     <span class="flex-grow-1">
-                        <input type="range" min="1" max="100" class="slider js-slider js-disable-when-off" id="slider-device-{{ device.id }}" data-url="{{ path('api.yeelight.execute', {'target': device.id, 'method': 'set_bright', 'params': '__brightness__,sudden,50'}) }}">
+                        <input type="range" min="1" max="100" class="slider js-slider js-disable-when-off" id="slider-device-{{ key }}" data-url="{{ path('api.yeelight.execute', {'target': key, 'method': 'set_bright', 'params': '__brightness__,sudden,50'}) }}">
                     </span>
-                {% elseif device.brand == constant('App\\Entity\\Device::BRAND_ARDUINO') %}
+                {% elseif fixture.brand == constant('App\\Entity\\Device::BRAND_ARDUINO') %}
                     <p>todo: Arduino actions</p>
                 {% endif %}
             </div>
             <div class="col-0 col-md-1"></div>
             <div class="col-12 col-md-11 d-flex align-items-center">
                 <span class="fas fa-tag dark-gray"></span>
-                {% for tag in device.tags %}
-                    <span class="ml-2 badge badge-pill badge-primary">{{ tag.name }}</span>
+                {% for tag in fixture.tags %}
+                    <span class="ml-2 badge badge-pill badge-primary">{{ tag }}</span>
                 {% endfor %}
             </div>
         </div>

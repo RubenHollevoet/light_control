@@ -10,6 +10,7 @@ use App\Form\CallsType;
 use App\Form\DevicesType;
 use App\Form\ScenesType;
 use App\Form\TagsType;
+use App\Services\DashboardService;
 use App\Services\YeelightService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,12 +21,16 @@ class DashboardController extends AbstractController
     /** @var YeelightService $yeelightService */
     private $yeelightService;
 
+    /** @var DashboardService $dashboardService */
+    private $dashboardService;
+
     /**
      * DashboardController constructor.
      */
-    public function __construct(YeelightService $yeelightService)
+    public function __construct(YeelightService $yeelightService, DashboardService $dashboardService)
     {
         $this->yeelightService = $yeelightService;
+        $this->dashboardService = $dashboardService;
     }
 
     public function index(Request $request)
@@ -33,17 +38,20 @@ class DashboardController extends AbstractController
         $em = $this->getDoctrine()->getManager();
 
         $devices = $em->getRepository(Device::class)->findOrdered();
-        $tags =  $em->getRepository(Tag::class)->findOrdered();
+        $tags =  $em->getRepository(Tag::class)->findOrdered(); //todo: no clusters
         $scenes =  $em->getRepository(Scene::class)->findAll();
 
         $sceneLabels = $em->createQuery('SELECT s.label FROM App\Entity\Scene s GROUP BY s.label')->getResult();
         $sceneLabels = array_column($sceneLabels, 'label');
         $sceneLabels = array_filter($sceneLabels);
 
+        $fixtures = $this->dashboardService->getAllFixtures();
+
         return $this->render('dashboard/dashboard.html.twig', [
             'sceneLabels' => $sceneLabels,
             'scenes' => $scenes,
-            'devices' => $devices,
+            'fixtures' => $fixtures,
+//            'devices' => $devices,
             'tags' => $tags,
         ]);
     }
