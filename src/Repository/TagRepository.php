@@ -23,6 +23,7 @@ class TagRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('t')
             ->orderBy('t.order', 'ASC')
+            ->where('t.cluster = false')
             ->getQuery()
             ->getResult()
             ;
