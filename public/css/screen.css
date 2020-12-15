@@ -1,0 +1,11 @@
+html, body {
+    height: 100%;
+}
+
+* {
+    font-family: 'Barlow Condensed', sans-serif;
+}
+
+.rem9-5 {
+    font-size: 9.5rem;
+}
