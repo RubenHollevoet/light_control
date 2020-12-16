@@ -9,3 +9,11 @@ html, body {
 .rem9-5 {
     font-size: 9.5rem;
 }
+
+.w-33 {
+    width: 33%!important;
+}
+
+.fas.off {
+    color: #5b636b;
+}
