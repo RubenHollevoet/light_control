@@ -224,7 +224,7 @@ class Device
     {
         if (!$this->tags->contains($tag)) {
             $this->tags[] = $tag;
-            $tag->addDevife($this);
+            $tag->addDevice($this);
         }
 
         return $this;
