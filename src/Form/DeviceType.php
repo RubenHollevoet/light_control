@@ -28,6 +28,8 @@ class DeviceType extends AbstractType
                     Device::TYPE_YEELIGHT_BULB_COLOR_2 => Device::TYPE_YEELIGHT_BULB_COLOR_2,
                     Device::TYPE_YEELIGHT_BULB_COLOR_S1 => Device::TYPE_YEELIGHT_BULB_COLOR_S1,
                     Device::TYPE_YEELIGHT_STRIP_COLOR => Device::TYPE_YEELIGHT_STRIP_COLOR,
+                    Device::TYPE_YEELIGHT_FULFILLMENT => Device::TYPE_YEELIGHT_FULFILLMENT,
+                    Device::TYPE_WLED => Device::TYPE_WLED,
                     Device::TYPE_ARDUINO_TODO => Device::TYPE_ARDUINO_TODO,
                 ],
             ])

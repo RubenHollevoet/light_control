@@ -22,7 +22,7 @@ class TagRepository extends ServiceEntityRepository
     public function findOrdered()
     {
         return $this->createQueryBuilder('t')
-            ->orderBy('t.order', 'ASC')
+            ->orderBy('t.sort', 'ASC')
             ->where('t.cluster = false')
             ->getQuery()
             ->getResult()

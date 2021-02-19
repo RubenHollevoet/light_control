@@ -30,9 +30,9 @@ class Tag
     private $Devices;
 
     /**
-     * @ORM\Column(type="integer", nullable=true, name="order_")
+     * @ORM\Column(type="integer", nullable=true, name="sort")
      */
-    private $order;
+    private $sort;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Call", mappedBy="tag")
@@ -101,17 +101,17 @@ class Tag
     /**
      * @return mixed
      */
-    public function getOrder()
+    public function getSort()
     {
-        return $this->order;
+        return $this->sort;
     }
 
     /**
-     * @param mixed $order
+     * @param mixed $sort
      */
-    public function setOrder($order): void
+    public function setSort($sort): void
     {
-        $this->order = $order;
+        $this->sort = $sort;
     }
 
     /**

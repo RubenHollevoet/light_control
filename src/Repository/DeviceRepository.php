@@ -22,7 +22,7 @@ class DeviceRepository extends ServiceEntityRepository
     public function findOrdered()
     {
         return $this->createQueryBuilder('d')
-            ->orderBy('d.order', 'ASC')
+            ->orderBy('d.sort', 'ASC')
             ->getQuery()
             ->getResult()
             ;

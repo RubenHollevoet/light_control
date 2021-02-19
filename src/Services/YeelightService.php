@@ -58,6 +58,7 @@ class YeelightService
                 $device->setDeviceId($yeelight->getId());
                 $device->setBrand(Device::BRAND_YEELIGHT);
                 $device->setName('Yeelight');
+                $device->setSort(0);
                 $this->em->persist($device);
             }
 

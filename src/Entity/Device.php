@@ -19,6 +19,8 @@ class Device
     public const TYPE_YEELIGHT_BULB_COLOR_2 = 'Yee bulb V2 color';
     public const TYPE_YEELIGHT_BULB_COLOR_S1 = 'Yee bulb S1 color';
     public const TYPE_YEELIGHT_STRIP_COLOR = 'Yee Led strip';
+    public const TYPE_YEELIGHT_FULFILLMENT = 'Yee Fulfillment bulb';
+    public const TYPE_WLED = 'WLED strip';
     public const TYPE_ARDUINO_TODO = 'Arduino TODO';
 
     /**
@@ -61,14 +63,14 @@ class Device
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Tag", inversedBy="Devices")
      * @ORM\JoinTable(name="app_tag_device")
-     * @ORM\OrderBy({"order" = "DESC"})
+     * @ORM\OrderBy({"sort" = "DESC"})
      */
     private $tags;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $order;
+    private $sort;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Call", mappedBy="device")
@@ -253,17 +255,17 @@ class Device
     /**
      * @return mixed
      */
-    public function getOrder()
+    public function getSort()
     {
-        return $this->order;
+        return $this->sort;
     }
 
     /**
-     * @param mixed $order
+     * @param mixed $sort
      */
-    public function setOrder($order): void
+    public function setSort($sort): void
     {
-        $this->order = $order;
+        $this->sort = $sort;
     }
 
     /**
