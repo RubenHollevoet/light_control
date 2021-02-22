@@ -56,7 +56,6 @@ class YeelightService
             {
                 $device = new Device();
                 $device->setDeviceId($yeelight->getId());
-                $device->setBrand(Device::BRAND_YEELIGHT);
                 $device->setName('Yeelight');
                 $device->setSort(0);
                 $this->em->persist($device);
@@ -80,14 +79,12 @@ class YeelightService
                 throw new NotFoundHttpException('Unknown tag for id '.substr($target, 1));
             }
             foreach ($tag->getDevices() as $device) {
-                if($device->getBrand() === Device::BRAND_YEELIGHT) {
-                    $yeeResp[] = $this->execute($device, $method, $params, $responseId);
-                }
+                $yeeResp[] = $this->execute($device, $method, $params, $responseId);
             }
         }
         else {
             /** @var Device $device */
-            if(null === $device = $this->em->getRepository(Device::class)->findOneBy(['id' => $target, 'brand' => Device::BRAND_YEELIGHT])) {
+            if(null === $device = $this->em->getRepository(Device::class)->findOneBy(['id' => $target])) {
                 throw new NotFoundHttpException('No Yeelight registered with this ID');
             }
             $yeeResp = $this->execute($device, $method, $params, $responseId);

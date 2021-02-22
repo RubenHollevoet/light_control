@@ -40,6 +40,23 @@
     <script src="/js/bootstrap/bootstrap-select.min.js"></script>
     <script src="/js/axios/axios.min.js"></script>
     <script>
+        $(document).ready(function () {
+            $('.js-add-widget').click(function (e) {
+                var list = $($(this).attr('data-list-selector'));
+                var counter = list.data('widget-counter') || list.children().length;
+
+                var newWidget = list.attr('data-prototype');
+
+                newWidget = newWidget.replace(/__deviceid__/g, counter);
+                counter++;
+                list.data('widget-counter', counter);
+
+                $(list).append(newWidget);
+
+                $('.selectpicker').selectpicker('refresh');
+            });
+        });
+
         document.querySelectorAll('.js-ajax').forEach(function (el) {
             el.addEventListener('click', function (e) {
                 axios.get(e.currentTarget.dataset.url)

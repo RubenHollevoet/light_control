@@ -51,7 +51,6 @@ class DashboardController extends AbstractController
             'sceneLabels' => $sceneLabels,
             'scenes' => $scenes,
             'fixtures' => $fixtures,
-//            'devices' => $devices,
             'tags' => $tags,
         ]);
     }
@@ -166,7 +165,6 @@ class DashboardController extends AbstractController
             'sceneLabels' => $sceneLabels,
             'ip' => $this->getHost(),
             'form' => $form->createView(),
-//            'scenes' => [],
         ]);
     }
 

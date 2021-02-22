@@ -25,12 +25,21 @@ class DeviceType extends AbstractType
             ->add('type', ChoiceType::class, [
                 'label' => false,
                 'choices'  => [
-                    Device::TYPE_YEELIGHT_BULB_COLOR_2 => Device::TYPE_YEELIGHT_BULB_COLOR_2,
-                    Device::TYPE_YEELIGHT_BULB_COLOR_S1 => Device::TYPE_YEELIGHT_BULB_COLOR_S1,
-                    Device::TYPE_YEELIGHT_STRIP_COLOR => Device::TYPE_YEELIGHT_STRIP_COLOR,
-                    Device::TYPE_YEELIGHT_FULFILLMENT => Device::TYPE_YEELIGHT_FULFILLMENT,
-                    Device::TYPE_WLED => Device::TYPE_WLED,
-                    Device::TYPE_ARDUINO_TODO => Device::TYPE_ARDUINO_TODO,
+                    [
+                        'Yeelight' => [
+                            Device::TYPE_YEELIGHT_BULB_COLOR_2 => Device::TYPE_YEELIGHT_BULB_COLOR_2,
+                            Device::TYPE_YEELIGHT_BULB_COLOR_S1 => Device::TYPE_YEELIGHT_BULB_COLOR_S1,
+                            Device::TYPE_YEELIGHT_STRIP_COLOR => Device::TYPE_YEELIGHT_STRIP_COLOR,
+                            Device::TYPE_YEELIGHT_FULFILLMENT => Device::TYPE_YEELIGHT_FULFILLMENT,
+                        ],
+                        'Custom' => [
+                            Device::TYPE_WLED => Device::TYPE_WLED,
+                        ],
+//                        'Other' => [
+//                            Device::TYPE_ARDUINO_TODO => Device::TYPE_ARDUINO_TODO,
+//                        ]
+                    ]
+
                 ],
             ])
             ->add('tags', null, [

@@ -47,11 +47,7 @@
     {% for key, fixture in fixtures %}
         <div class="row js-yeelight py-3" data-id="{{ key }}">
             <div class="col-2 col-md-1 align-self-center d-flex align-items-baseline">
-                {% if fixture.brand == constant('App\\Entity\\Device::BRAND_YEELIGHT') %}
-                    <img src="{{ asset('img/icons/yeelight.png') }}" width="48" height="48" alt="icon yeelight">
-                {% elseif fixture.brand == constant('App\\Entity\\Device::BRAND_ARDUINO') %}
-                    <img src="{{ asset('img/icons/arduino.png') }}" width="48" height="48" alt="icon yeelight">
-                {% endif %}
+                <img src="{{ 'img/icons/'~fixture.type|replace({' ': ''})~'.png' }}" width="48" height="48" alt="icon yeelight">
                 {% if fixture.isCluster %}
                     <i class="fas fa-layer-group ml-1"></i>
                 {% endif %}
@@ -61,20 +57,25 @@
             </div>
             <div class="col-5 col-md-2 align-self-center">
                 <span><i class="fas fa-lightbulb fa-lg js-icon-lamp"></i></span>
-                <span><i class="fas fa-signal fa-lg ml-2 dark-gray"></i><span class="ml-1 js-icon-bright"></span></span>
+                <span class="js-brightness"></span>
             </div>
             <div class="col-md-7 py-2 align-items-center d-flex">
-                {% if fixture.brand == constant('App\\Entity\\Device::BRAND_YEELIGHT') %}
-                    <div class="btn-group mr-3" role="group" aria-label="Button group with nested dropdown">
+                <div class="btn-group mr-3" role="group" aria-label="Button group with nested dropdown">
+                    {% if has_device_option(fixture.type, constant('App\\Services\\DeviceOptionsService::ACTION_ON_OFF')) %}
                         <button type="button" class="btn btn-outline-primary js-ajax" data-url="{{ path('api.yeelight.execute', {'target': key, 'method': 'set_power', 'params': 'on,sudden,0'}) }}">On</button>
                         <button type="button" class="btn btn-outline-primary js-ajax js-disable-when-off" data-url="{{ path('api.yeelight.execute', {'target': key, 'method': 'set_power', 'params': 'off,sudden,0'}) }}">Off</button>
+                    {% endif %}
+                    {% if has_device_option(fixture.type, constant('App\\Services\\DeviceOptionsService::ACTION_WW')) %}
                         <button type="button" class="btn btn-outline-primary js-ajax js-disable-when-off" data-url="{{ path('api.yeelight.execute', {'target': key, 'method': 'set_ct_abx', 'params': '3030,sudden,0'}) }}">WW</button>
-                    </div>
+                    {% endif %}
+                    {% if has_device_option(fixture.type, constant('App\\Services\\DeviceOptionsService::ACTION_OPEN_IN_BROWSER')) %}
+                        <a href="http://{{ fixture.ip }}" target="_blank" class="btn btn-outline-primary"><span class="fa fa-chrome text-primary"></span></a>
+                    {% endif %}
+                </div>
+                {% if has_device_option(fixture.type, constant('App\\Services\\DeviceOptionsService::ACTION_SLIDER_BRIGHTNESS')) %}
                     <span class="flex-grow-1">
                         <input type="range" min="1" max="100" class="slider js-slider js-disable-when-off" id="slider-device-{{ key }}" data-url="{{ path('api.yeelight.execute', {'target': key, 'method': 'set_bright', 'params': '__brightness__,sudden,50'}) }}">
                     </span>
-                {% elseif fixture.brand == constant('App\\Entity\\Device::BRAND_ARDUINO') %}
-                    <p>todo: Arduino actions</p>
                 {% endif %}
             </div>
             <div class="col-0 col-md-1"></div>
@@ -139,7 +140,7 @@
 
                             }
 
-                            el.querySelector('.js-icon-bright').textContent = data[1] + '%';
+                            el.querySelector('.js-brightness').textContent = data[1] + '%';
                             el.querySelector('.js-slider').value = data[1];
 
                             // enable/disable action buttons when on/of

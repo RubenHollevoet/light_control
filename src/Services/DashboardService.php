@@ -36,7 +36,7 @@ class DashboardService
             if($tag = $device->getClusterTag()) {
                 $fixtures['t'.$tag->getId()] = [
                     'name' => $tag->getName(),
-                    'brand' => $device->getBrand(),
+                    'type' => $device->getType(),
                     'isCluster' => true,
                     'tags' => $tags,
                 ];
@@ -44,7 +44,8 @@ class DashboardService
             else {
                 $fixtures[$device->getId()] = [
                     'name' => $device->getName(),
-                    'brand' => $device->getBrand(),
+                    'type' => $device->getType(),
+                    'ip' => $device->getIP(),
                     'isCluster' => false,
                     'tags' => $tags
                 ];
