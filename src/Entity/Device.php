@@ -222,7 +222,7 @@ class Device
     {
         if ($this->tags->contains($tag)) {
             $this->tags->removeElement($tag);
-            $tag->removeDevife($this);
+            $tag->removeDevice($this);
         }
 
         return $this;
